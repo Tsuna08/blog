@@ -1,8 +1,6 @@
-import { Card, styled, Typography } from "@mui/material";
+import { Card, CardContent, CardHeader, styled } from "@mui/material";
 
 export const StyledCard = styled(Card)`
-  max-width: 1040px;
-  max-height: 280px;
   border-radius: 10px;
   background: white;
   align-items: flex-start;
@@ -10,13 +8,27 @@ export const StyledCard = styled(Card)`
 
   &:hover {
     box-shadow: 4px 8px 40px 0px #08186f33;
+    cursor: pointer;
   }
 `;
 
-export const StyledContent = styled(Typography)`
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  color: #2f222266;
+export const StyledHeader = styled(CardHeader)`
+  .MuiCardHeader-content {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: space-evenly;
+    gap: 0.5rem;
+
+    span:nth-child(2) {
+      color: #2f222266;
+    }
+  }
+`;
+
+export const StyledContent = styled(CardContent)`
+  padding: 0 1rem;
+
+  p:nth-child(1) {
+    margin-top: 0;
+  }
 `;

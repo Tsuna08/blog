@@ -1,7 +1,8 @@
 import { styled } from "@mui/material";
 
 export const StyledImage = styled("img")`
-  width: 99.9vw;
+  width: 100%;
   max-height: 190px;
-  margin: -2rem -10% 0 -9.4%;
+  object-fit: cover;
+  border-radius: 0.5rem;
 `;

@@ -1,11 +1,11 @@
-import { Avatar, Typography } from "@mui/material";
+import { Avatar } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 
 import { routers } from "@/app/routers";
 import Logo from "@/shared/assets/Logo.svg";
 
 import { footerLinks } from "../model/footer";
-import { StyledBox, StyledFooter, StyledLink } from "./Footer.module";
+import { StyledBox, StyledCaption, StyledFooter, StyledLink } from "./Footer.module";
 
 export const Footer = () => {
   const navigate = useNavigate();
@@ -20,9 +20,9 @@ export const Footer = () => {
           </StyledLink>
         ))}
       </StyledBox>
-      <Typography variant='caption'>
+      <StyledCaption variant='caption'>
         ООО “Организация” 2020 - {new Date().getFullYear()}. Все права защищены
-      </Typography>
+      </StyledCaption>
     </StyledFooter>
   );
 };

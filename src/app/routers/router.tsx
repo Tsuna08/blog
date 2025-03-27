@@ -6,6 +6,7 @@ import { Admin } from "@/pages/Admin/Admin";
 import { Articles } from "@/pages/Admin/Articles";
 import { Comments } from "@/pages/Admin/Comments";
 import { Users } from "@/pages/Admin/Users";
+import { ArticlePage } from "@/pages/Article/Article";
 import { Contacts } from "@/pages/Contacts";
 import { Error } from "@/pages/Error/Error";
 import { Login } from "@/pages/Login";
@@ -48,7 +49,7 @@ export const router = createBrowserRouter([
         path: routers.article,
         element: (
           <ProtectedRoute>
-            <>article</>
+            <ArticlePage />
           </ProtectedRoute>
         ),
       },

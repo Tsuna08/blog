@@ -1,4 +1,4 @@
-import { Box, Link, styled } from "@mui/material";
+import { Box, Link, styled, Typography } from "@mui/material";
 
 export const StyledFooter = styled("footer")`
   display: flex;
@@ -21,4 +21,8 @@ export const StyledLink = styled(Link)`
   font-size: 0.9rem;
   color: #2f2222;
   cursor: pointer;
+`;
+
+export const StyledCaption = styled(Typography)`
+  color: #2f2222;
 `;
