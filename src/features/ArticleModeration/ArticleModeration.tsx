@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { AppDispatch, RootState } from "@/app/store/store";
 import { fetchArticles, selectAllArticles } from "@/entities/Article";
-import { Loader } from "@/shared/components/Loader";
+import { Loader, SafeHtmlRenderer } from "@/shared/components";
 import { getDate } from "@/shared/hooks/getDate";
 
 import { StyledList, StyledListItemText } from "./ArticleModeration.module";
@@ -38,7 +38,7 @@ export const ArticleModeration = () => {
                   >
                     {getDate(article.createdAt)}
                   </Typography>{" "}
-                  {article.context}
+                  <SafeHtmlRenderer htmlContent={article.context} />
                 </>
               }
             />

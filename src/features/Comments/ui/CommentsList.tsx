@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { AppDispatch, RootState } from "@/app/store/store";
-import { Loader } from "@/shared/components/Loader";
+import { Loader } from "@/shared/components";
 
 import { fetchComments, selectAllComments } from "../model/commentsSlice"; // Путь к вашему slice
 

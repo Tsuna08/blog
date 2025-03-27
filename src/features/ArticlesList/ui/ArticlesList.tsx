@@ -4,11 +4,13 @@ import { generatePath, useNavigate } from "react-router-dom";
 
 import { routers } from "@/app/routers";
 import { AppDispatch, RootState } from "@/app/store/store";
-import { ArticleCard, fetchArticles, selectAllArticles } from "@/entities/Article";
-import { Loader } from "@/shared/components/Loader";
+import { fetchArticles, selectAllArticles } from "@/entities/Article";
+import { Loader, SafeHtmlRenderer } from "@/shared/components";
+import { getDate } from "@/shared/hooks/getDate";
 
 import { getGridStyles } from "../lib/getGridStyles";
-import { StyledList } from "./ArticlesList.module";
+import { StyledCard, StyledContent, StyledHeader, StyledList } from "./ArticlesList.module";
+import classes from "./ArticlesList.module.scss";
 
 export const ArticlesList = () => {
   const navigate = useNavigate();
@@ -28,12 +30,17 @@ export const ArticlesList = () => {
   return (
     <StyledList>
       {articles?.map((article, index) => (
-        <ArticleCard
-          {...article}
-          sx={getGridStyles(index)}
-          key={article.id}
+        <StyledCard
           onClick={() => navigate(generatePath(routers.article, { id: article.id }))}
-        />
+          sx={getGridStyles(index)}
+        >
+          <StyledHeader title={article.title} subheader={getDate(article?.createdAt)} />
+          {article.context && (
+            <StyledContent>
+              <SafeHtmlRenderer className={classes.text} htmlContent={article.context} />
+            </StyledContent>
+          )}
+        </StyledCard>
       ))}
     </StyledList>
   );
