@@ -27,7 +27,7 @@ export const StyledHeader = styled(CardHeader)`
     justify-content: space-evenly;
     gap: 0.5rem;
 
-    span:nth-child(2) {
+    span:nth-of-type(2) {
       color: #2f222266;
     }
   }
@@ -36,7 +36,7 @@ export const StyledHeader = styled(CardHeader)`
 export const StyledContent = styled(CardContent)`
   padding: 0 1rem;
 
-  p:nth-child(1) {
+  p:nth-of-type(1) {
     margin-top: 0;
   }
 `;

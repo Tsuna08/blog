@@ -29,15 +29,18 @@ export const StyledIconButton = styled(IconButton)`
 `;
 
 export const StyledBottomNavigation = styled(BottomNavigation)`
-  gap: 0.5rem;
+  gap: 1rem;
 `;
 
 export const StyledBottomNavigationAction = styled(BottomNavigationAction)`
   text-align: center;
+  padding: 0;
+  min-width: auto;
 
   .Mui-selected {
     color: #5d71dd;
     font-weight: 400;
+    font-size: 0.75rem !important;
   }
 
   &:focus {

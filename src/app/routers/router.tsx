@@ -8,6 +8,7 @@ import { Comments } from "@/pages/Admin/Comments";
 import { Users } from "@/pages/Admin/Users";
 import { ArticlePage } from "@/pages/Article/Article";
 import { Contacts } from "@/pages/Contacts";
+import { CreateArticle } from "@/pages/CreateArticle/CreateArticle";
 import { Error } from "@/pages/Error/Error";
 import { Login } from "@/pages/Login";
 import { Main } from "@/pages/Main/Main";
@@ -50,6 +51,14 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <ArticlePage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: routers.createArticle,
+        element: (
+          <ProtectedRoute>
+            <CreateArticle />
           </ProtectedRoute>
         ),
       },

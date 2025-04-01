@@ -6,6 +6,10 @@ export const userLinks = [
     name: "Главная",
   },
   {
+    link: routers.createArticle,
+    name: "Написать статью",
+  },
+  {
     link: routers.about,
     name: "О нас",
   },

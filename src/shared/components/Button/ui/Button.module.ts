@@ -6,4 +6,8 @@ export const StyledButton = styled(Button)(({ variant }) => ({
   borderRadius: "1rem",
   color: variant === "contained" ? "white" : "#5d71dd",
   "text-transform": "math-auto",
+
+  ":focus": {
+    outline: "none",
+  },
 }));

@@ -3,5 +3,5 @@ export interface IArticle {
   title: string;
   context: string;
   authorId?: string;
-  createdAt?: string;
+  createdAt?: string | Date;
 }

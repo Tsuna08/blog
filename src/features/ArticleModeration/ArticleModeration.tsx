@@ -1,24 +1,16 @@
 import { Divider, ListItem, Typography } from "@mui/material";
-import { Fragment, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { Fragment } from "react";
 
-import { AppDispatch, RootState } from "@/app/store/store";
-import { fetchArticles, selectAllArticles } from "@/entities/Article";
+import { useFetchArticlesQuery } from "@/entities/Article";
 import { Loader, SafeHtmlRenderer } from "@/shared/components";
 import { getDate } from "@/shared/hooks/getDate";
 
 import { StyledList, StyledListItemText } from "./ArticleModeration.module";
 
 export const ArticleModeration = () => {
-  const dispatch = useDispatch<AppDispatch>();
-  const articles = useSelector(selectAllArticles);
-  const { loading } = useSelector((state: RootState) => state.articles);
+  const { data: articles, isLoading } = useFetchArticlesQuery();
 
-  useEffect(() => {
-    dispatch(fetchArticles());
-  }, [dispatch]);
-
-  if (loading) {
+  if (isLoading) {
     return <Loader />;
   }
 

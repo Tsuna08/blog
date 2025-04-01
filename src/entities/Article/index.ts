@@ -1,1 +1,7 @@
-export { fetchArticles, selectAllArticles, selectArticleById } from "./model/articleSlice";
+export {
+  useAddArticleMutation,
+  useDeleteArticleMutation,
+  useFetchArticlesQuery,
+  useGetArticleQuery,
+  useUpdateArticleMutation,
+} from "./model/apiArticle";
