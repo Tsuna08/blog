@@ -32,11 +32,7 @@ export const router = createBrowserRouter([
       },
       {
         path: routers.root,
-        element: (
-          <ProtectedRoute>
-            <Main />
-          </ProtectedRoute>
-        ),
+        element: <Main />,
       },
       {
         path: routers.profile,
@@ -48,35 +44,19 @@ export const router = createBrowserRouter([
       },
       {
         path: routers.article,
-        element: (
-          <ProtectedRoute>
-            <ArticlePage />
-          </ProtectedRoute>
-        ),
+        element: <ArticlePage />,
       },
       {
         path: routers.createArticle,
-        element: (
-          <ProtectedRoute>
-            <CreateArticle />
-          </ProtectedRoute>
-        ),
+        element: <CreateArticle />,
       },
       {
         path: routers.about,
-        element: (
-          <ProtectedRoute>
-            <>about</>
-          </ProtectedRoute>
-        ),
+        element: <>about</>,
       },
       {
         path: routers.contacts,
-        element: (
-          <ProtectedRoute>
-            <Contacts />
-          </ProtectedRoute>
-        ),
+        element: <Contacts />,
       },
       {
         path: routers.admin,

@@ -7,7 +7,7 @@ import { useAuth } from "@/app/providers/AuthProvider";
 import { routers } from "@/app/routers";
 import Logo from "@/shared/assets/Logo.svg";
 
-import { adminLink, userLinks } from "../model/header";
+import { adminLink, isUserLinks, listLinks } from "../model/header";
 import {
   StyledAppBar,
   StyledBottomNavigation,
@@ -22,11 +22,11 @@ interface HeaderProps {
 
 export const Header = ({ onClick }: HeaderProps) => {
   const navigate = useNavigate();
-  const { isAdmin } = useAuth();
+  const { isAdmin, user } = useAuth();
 
   const [value, setValue] = useState(0);
 
-  const links = isAdmin ? [...userLinks, ...adminLink] : userLinks;
+  const links = [...listLinks, ...(user ? isUserLinks : []), ...(isAdmin ? adminLink : [])];
 
   return (
     <StyledAppBar position='static'>
