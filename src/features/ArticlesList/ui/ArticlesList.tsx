@@ -13,25 +13,27 @@ export const ArticlesList = () => {
   const navigate = useNavigate();
   const { data: articles, isLoading } = useFetchArticlesQuery();
 
-  if (isLoading) {
-    return <Loader />;
-  }
-
   return (
     <StyledList>
-      {articles?.map((article, index) => (
-        <StyledCard
-          onClick={() => navigate(generatePath(routers.article, { id: article.id }))}
-          sx={getGridStyles(index)}
-        >
-          <StyledHeader title={article.title} subheader={getDate(article?.createdAt)} />
-          {article.context && (
-            <StyledContent>
-              <SafeHtmlRenderer className={classes.text} htmlContent={article.context} />
-            </StyledContent>
-          )}
-        </StyledCard>
-      ))}
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <>
+          {articles?.map((article, index) => (
+            <StyledCard
+              onClick={() => navigate(generatePath(routers.article, { id: article.id }))}
+              sx={getGridStyles(index)}
+            >
+              <StyledHeader title={article.title} subheader={getDate(article?.createdAt)} />
+              {article.context && (
+                <StyledContent>
+                  <SafeHtmlRenderer className={classes.text} htmlContent={article.context} />
+                </StyledContent>
+              )}
+            </StyledCard>
+          ))}
+        </>
+      )}
     </StyledList>
   );
 };

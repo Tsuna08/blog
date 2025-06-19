@@ -1,4 +1,15 @@
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, updateDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  limit,
+  orderBy,
+  query,
+  updateDoc,
+} from "firebase/firestore";
 
 import { db } from "@/app/firebase";
 import { baseApi } from "@/app/store/baseApi";
@@ -11,13 +22,24 @@ export const articlesApi = baseApi.enhanceEndpoints({ addTagTypes: ["Articles"] 
   endpoints: (builder) => ({
     fetchArticles: builder.query<IArticle[], void>({
       async queryFn() {
-        const snapshot = await getDocs(collection(db, collectionName));
+        const snapshot = await getDocs(
+          query(collection(db, collectionName), orderBy("createdAt", "desc")),
+        );
         const articles = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }) as IArticle);
         return { data: articles };
       },
       providesTags: ["Articles"],
     }),
-
+    fetchPopularArticles: builder.query<IArticle[], void>({
+      async queryFn() {
+        const snapshot = await getDocs(
+          query(collection(db, collectionName), orderBy("likes", "desc"), limit(3)),
+        );
+        const articles = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }) as IArticle);
+        return { data: articles };
+      },
+      providesTags: ["Articles"],
+    }),
     getArticle: builder.query<IArticle, string>({
       async queryFn(id) {
         const snapshot = await getDoc(doc(db, collectionName, id));
@@ -62,4 +84,5 @@ export const {
   useAddArticleMutation,
   useDeleteArticleMutation,
   useUpdateArticleMutation,
+  useFetchPopularArticlesQuery,
 } = articlesApi;

@@ -6,6 +6,7 @@ export const StyledList = styled(List)`
   grid-auto-rows: minmax(100px, auto);
   gap: 1rem;
   padding-top: 1rem;
+  flex-shrink: 2;
 `;
 
 export const StyledCard = styled(Card)`
@@ -21,13 +22,14 @@ export const StyledCard = styled(Card)`
 `;
 
 export const StyledHeader = styled(CardHeader)`
+  padding: 0.8rem 1rem;
   .MuiCardHeader-content {
     display: flex;
-    flex-direction: column-reverse;
-    justify-content: space-evenly;
+    justify-content: space-between;
     gap: 0.5rem;
 
     span:nth-of-type(2) {
+      flex-shrink: 0;
       color: #2f222266;
     }
   }
@@ -35,6 +37,9 @@ export const StyledHeader = styled(CardHeader)`
 
 export const StyledContent = styled(CardContent)`
   padding: 0 1rem;
+  &:last-child {
+    padding-bottom: 1rem;
+  }
 
   p:nth-of-type(1) {
     margin-top: 0;
