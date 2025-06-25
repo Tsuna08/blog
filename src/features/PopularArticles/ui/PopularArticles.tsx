@@ -19,7 +19,7 @@ export const PopularArticles = () => {
       ) : (
         <>
           <Typography variant='h6' fontSize='24px'>
-            Попоулярные статьи
+            Популярные статьи
           </Typography>
           <List>
             {articles?.map((article, index) => (

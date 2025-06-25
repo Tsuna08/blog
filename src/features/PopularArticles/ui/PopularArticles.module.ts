@@ -17,6 +17,10 @@ export const StyledListItemText = styled(ListItemText)`
   flex-direction: column;
   gap: 0.5rem;
 
+  &:hover {
+    color: #5d71dd;
+  }
+
   .MuiListItemText-secondary {
     color: #2f222266;
   }

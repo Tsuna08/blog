@@ -105,7 +105,7 @@ export const Login: FC = () => {
           Войти
         </Button>
       </form>
-      <Link sx={{ textDecoration: "none" }} href={routers.signup}>
+      <Link sx={{ textDecoration: "none", color: "#5d71dd" }} href={routers.signup}>
         Регистрация
       </Link>
       <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
