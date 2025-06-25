@@ -5,9 +5,22 @@ export const getGridStyles = (index: number) => {
     gridRow: "span 1",
     background: "#5D71DD",
     color: "white",
-    "&:hover": { background: "white", span: { color: "black" } },
+    "&:hover": {
+      background: "white",
+      span: { color: "black" },
+      div: {
+        p: { color: "gray" },
+        "span:nth-of-type(2)": { color: "gray !important" },
+      },
+      button: { color: "gray" },
+    },
     span: { color: "white" },
-    "div > p": { color: "lightGray" },
+    div: {
+      flexWrap: "wrap-reverse",
+      p: { color: "lightGray" },
+      "span:nth-of-type(2)": { color: "lightGray !important" },
+    },
+    button: { color: "lightGray", div: { color: "lightGray" } },
   };
 
   switch (position) {

@@ -1,13 +1,13 @@
 import { Menu } from "@mui/icons-material";
 import { Avatar, Tooltip } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { useAuth } from "@/app/providers/AuthProvider";
 import { routers } from "@/app/routers";
 import Logo from "@/shared/assets/Logo.svg";
 
-import { adminLink, isUserLinks, listLinks } from "../model/header";
+import { adminLink, isUserLinks, listLinks, noUsersLinks } from "../model/header";
 import {
   StyledAppBar,
   StyledBottomNavigation,
@@ -17,16 +17,30 @@ import {
 } from "./Headers.module";
 
 interface HeaderProps {
-  onClick?: (open: any) => void;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 export const Header = ({ onClick }: HeaderProps) => {
   const navigate = useNavigate();
-  const { isAdmin, user } = useAuth();
+  const { isAdmin, user, logout } = useAuth();
 
   const [value, setValue] = useState(0);
+  const [links, setLinks] = useState(listLinks);
 
-  const links = [...listLinks, ...(user ? isUserLinks : []), ...(isAdmin ? adminLink : [])];
+  useEffect(() => setValue(0), [links]);
+  useEffect(
+    () =>
+      setLinks([
+        ...listLinks,
+        ...(isAdmin ? adminLink : []),
+        ...(user ? isUserLinks : noUsersLinks),
+      ]),
+    [isAdmin, user],
+  );
+
+  const logoutUser = () => {
+    logout().then(() => window.location.assign(routers.root));
+  };
 
   return (
     <StyledAppBar position='static'>
@@ -49,9 +63,14 @@ export const Header = ({ onClick }: HeaderProps) => {
           <StyledBottomNavigationAction
             label={item.name}
             key={index}
+            value={index}
             onClick={() => navigate(item.link)}
           />
         ))}
+        {user && (
+          <StyledBottomNavigationAction label='Выйти' onClick={logoutUser} value={links.length} />
+        )}
+        ,
       </StyledBottomNavigation>
     </StyledAppBar>
   );

@@ -25,6 +25,7 @@ export const PopularArticles = () => {
             {articles?.map((article, index) => (
               <>
                 <StyledListItem
+                  key={article.id}
                   alignItems='flex-start'
                   onClick={() => navigate(generatePath(routers.article, { id: article.id }))}
                 >
@@ -33,7 +34,7 @@ export const PopularArticles = () => {
                     secondary={getDate(article?.createdAt)}
                   />
                 </StyledListItem>
-                {articles.length !== index + 1 && <Divider />}
+                {articles.length !== index + 1 && <Divider key={index} />}
               </>
             ))}
           </List>

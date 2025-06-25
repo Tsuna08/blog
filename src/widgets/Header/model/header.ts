@@ -13,10 +13,6 @@ export const listLinks = [
     link: routers.contacts,
     name: "Контакты",
   },
-  {
-    link: routers.login,
-    name: "Войти",
-  },
 ];
 
 export const isUserLinks = [
@@ -25,6 +21,14 @@ export const isUserLinks = [
     name: "Написать статью",
   },
 ];
+
+export const noUsersLinks = [
+  {
+    link: routers.login,
+    name: "Войти",
+  },
+];
+
 export const adminLink = [
   {
     link: routers.admin,
