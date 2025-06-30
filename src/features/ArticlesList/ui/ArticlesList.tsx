@@ -1,7 +1,7 @@
 // import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { CardActions } from "@mui/material";
-import { MouseEvent } from "react";
+import { MouseEvent, useEffect, useState } from "react";
 import { generatePath, useNavigate } from "react-router-dom";
 
 import { routers } from "@/app/routers";
@@ -18,11 +18,19 @@ export const ArticlesList = () => {
   const navigate = useNavigate();
   const { data: articles, isLoading } = useFetchArticlesQuery();
   // const [updateArticle /*, { isLoading: isLoadingArticle }*/] = useUpdateArticleMutation();
+  const [allCards, setAllCards] = useState(articles);
 
-  const addFavorites = (event: MouseEvent<HTMLButtonElement>) => {
+  useEffect(() => {
+    setAllCards(articles?.map((item) => ({ ...item, liked: false })));
+  }, [articles]);
+
+  const addFavorites = (event: MouseEvent<HTMLButtonElement>, id: string) => {
     event.stopPropagation();
+    setAllCards(allCards?.map((item) => (item.id === id ? { ...item, liked: !item.liked } : item)));
     // updateArticle({});
   };
+
+  console.log("allCards: ", allCards);
 
   return (
     <StyledList>
@@ -30,7 +38,7 @@ export const ArticlesList = () => {
         <Loader />
       ) : (
         <>
-          {articles?.map((article, index) => (
+          {allCards?.map((article, index) => (
             <StyledCard
               onClick={() => navigate(generatePath(routers.article, { id: article.id }))}
               sx={getGridStyles(index)}
@@ -47,7 +55,7 @@ export const ArticlesList = () => {
                   ariaLabel='add to favorites'
                   icon={<FavoriteBorderIcon />}
                   counter={article.likes}
-                  onClick={addFavorites}
+                  onClick={(event) => addFavorites(event, article.id)}
                 />
               </CardActions>
             </StyledCard>
