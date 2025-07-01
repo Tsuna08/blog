@@ -13,6 +13,6 @@ interface CounterButtonProps {
 export const CounterButton = ({ icon, counter, ariaLabel, onClick }: CounterButtonProps) => (
   <StyledIconButton aria-label={ariaLabel} onClick={(event) => onClick(event)}>
     <StyledIcon>{icon}</StyledIcon>
-    <Typography variant='body2'>{counter}</Typography>
+    {counter > 0 && <Typography variant='body2'>{counter}</Typography>}
   </StyledIconButton>
 );

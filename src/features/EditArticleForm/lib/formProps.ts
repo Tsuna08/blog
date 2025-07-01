@@ -1,6 +1,6 @@
 import * as yup from "yup";
 
-import { IUser } from "@/entities/User/types/user";
+import { IArticle } from "@/entities/Article/types/article";
 import { requiredLabel } from "@/shared/constants/constants";
 
 import { IArticleForm } from "../types/articleForm";
@@ -10,17 +10,20 @@ export const articleSchema = yup.object({
   context: yup.string().required(requiredLabel),
 });
 
-export const defaultValues = {
-  title: undefined,
-  context: undefined,
+export const getDefaultValue = (article?: IArticle) => {
+  return {
+    title: article?.title,
+    context: article?.context.replace(/<\/?p>/g, ""),
+  };
 };
 
-export const prepareFormValues = (data: IArticleForm, user: IUser) => {
+export const prepareFormValues = (data: IArticleForm, article: IArticle) => {
   return {
+    id: article?.id,
     title: data.title,
     context: "<p>" + data?.context.replace(/\n+/g, "</p><p>") + "</p>",
-    authorId: user.uid,
-    createdAt: new Date().toISOString(),
-    likes: 0,
+    authorId: article?.authorId,
+    createdAt: article?.createdAt,
+    likes: article.likes,
   };
 };

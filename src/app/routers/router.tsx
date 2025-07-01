@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 
 import { Layout } from "@/app/Layout/Layout";
 import { routers } from "@/app/routers";
+import { About } from "@/pages/About/About";
 import { Admin } from "@/pages/Admin/Admin";
 import { Articles } from "@/pages/Admin/Articles";
 import { Comments } from "@/pages/Admin/Comments";
@@ -9,6 +10,7 @@ import { Users } from "@/pages/Admin/Users";
 import { ArticlePage } from "@/pages/Article/Article";
 import { Contacts } from "@/pages/Contacts";
 import { CreateArticle } from "@/pages/CreateArticle/CreateArticle";
+import { EditArticle } from "@/pages/EditArticle/EditArticle";
 import { Error } from "@/pages/Error/Error";
 import { Login } from "@/pages/Login";
 import { Main } from "@/pages/Main/Main";
@@ -35,6 +37,18 @@ export const router = createBrowserRouter([
         element: <Main />,
       },
       {
+        path: routers.article,
+        element: <ArticlePage />,
+      },
+      {
+        path: routers.about,
+        element: <About />,
+      },
+      {
+        path: routers.contacts,
+        element: <Contacts />,
+      },
+      {
         path: routers.profile,
         element: (
           <ProtectedRoute>
@@ -43,20 +57,20 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: routers.article,
-        element: <ArticlePage />,
-      },
-      {
         path: routers.createArticle,
-        element: <CreateArticle />,
+        element: (
+          <ProtectedRoute>
+            <CreateArticle />
+          </ProtectedRoute>
+        ),
       },
       {
-        path: routers.about,
-        element: <>about</>,
-      },
-      {
-        path: routers.contacts,
-        element: <Contacts />,
+        path: routers.editArticle,
+        element: (
+          <ProtectedRoute>
+            <EditArticle />
+          </ProtectedRoute>
+        ),
       },
       {
         path: routers.admin,

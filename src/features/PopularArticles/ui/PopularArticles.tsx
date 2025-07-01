@@ -1,4 +1,5 @@
 import { Divider, List, Typography } from "@mui/material";
+import { Fragment } from "react";
 import { generatePath, useNavigate } from "react-router-dom";
 
 import { routers } from "@/app/routers";
@@ -23,7 +24,7 @@ export const PopularArticles = () => {
           </Typography>
           <List>
             {articles?.map((article, index) => (
-              <>
+              <Fragment key={index}>
                 <StyledListItem
                   key={article.id}
                   alignItems='flex-start'
@@ -35,7 +36,7 @@ export const PopularArticles = () => {
                   />
                 </StyledListItem>
                 {articles.length !== index + 1 && <Divider key={index} />}
-              </>
+              </Fragment>
             ))}
           </List>
         </>
