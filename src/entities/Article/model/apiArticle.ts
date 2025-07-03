@@ -10,10 +10,9 @@ import {
 } from "firebase/firestore";
 
 import { baseApi } from "@/app/store/baseApi";
-import { IArticleLikes } from "@/features/ArticlesList/lib/article";
 
 import { collectionFc, docFc } from "../helpers/collection";
-import { IArticle } from "../types/article";
+import { IArticle, IArticleLikes } from "../types/article";
 
 export const articlesApi = baseApi.enhanceEndpoints({ addTagTypes: ["Articles"] }).injectEndpoints({
   endpoints: (builder) => ({
@@ -56,6 +55,7 @@ export const articlesApi = baseApi.enhanceEndpoints({ addTagTypes: ["Articles"] 
     }),
     updateArticle: builder.mutation<IArticle, IArticle>({
       async queryFn(article) {
+        console.log("article: 12 ", article);
         const { id, ...data } = article;
         await updateDoc(docFc(id), data);
         return { data: article };

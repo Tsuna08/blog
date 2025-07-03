@@ -4,24 +4,29 @@ import { MouseEvent, useEffect, useState } from "react";
 import { generatePath, useNavigate } from "react-router-dom";
 
 import { routers } from "@/app/routers";
-import { useFetchArticlesQuery, useUpdateArticlesLikesMutation } from "@/entities/Article";
+import {
+  IArticleLikes,
+  useFetchArticlesQuery,
+  useUpdateArticlesLikesMutation,
+} from "@/entities/Article";
 import { CounterButton } from "@/features/CounterButton";
 import { Loader, SafeHtmlRenderer } from "@/shared/components";
 import { getDate } from "@/shared/hooks/getDate";
 
-import { IArticleLikes } from "../lib/article";
 import { getGridStyles } from "../lib/getGridStyles";
 import { StyledCard, StyledContent, StyledHeader, StyledList } from "./ArticlesList.module";
 import classes from "./ArticlesList.module.scss";
 
 export const ArticlesList = () => {
   const navigate = useNavigate();
+
   const { data: articles, isLoading } = useFetchArticlesQuery();
   const [updateArticlesLikes, { isLoading: isUpdating }] = useUpdateArticlesLikesMutation();
+
   const [allCards, setAllCards] = useState<IArticleLikes[] | undefined>(articles);
 
   useEffect(() => {
-    setAllCards(articles?.map((item) => ({ ...item, liked: false })) ?? []);
+    setAllCards(articles?.map((item) => ({ ...item, likedByUser: false })) ?? []);
   }, [articles]);
 
   useEffect(() => {

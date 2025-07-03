@@ -7,4 +7,4 @@ export {
   useUpdateArticleMutation,
   useUpdateArticlesLikesMutation,
 } from "./model/apiArticle";
-export { type IArticle } from "./types/article";
+export { type IArticle, type IArticleLikes } from "./types/article";

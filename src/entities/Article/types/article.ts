@@ -6,3 +6,7 @@ export interface IArticle {
   authorId?: string;
   createdAt?: string | Date;
 }
+
+export interface IArticleLikes extends IArticle {
+  likedByUser?: boolean;
+}
