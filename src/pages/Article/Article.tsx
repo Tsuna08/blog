@@ -44,7 +44,7 @@ export const ArticlePage = () => {
           <StyledBox flexShrink={2} width='100%'>
             {article ? (
               <>
-                <Box display='flex' justifyContent='space-between'>
+                <Box display='flex' justifyContent='space-between' alignItems='center'>
                   <Typography variant='subtitle1' sx={{ color: "#2F222266" }}>
                     {getDate(article?.createdAt)}
                   </Typography>

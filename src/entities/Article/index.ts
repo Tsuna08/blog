@@ -5,4 +5,6 @@ export {
   useFetchPopularArticlesQuery,
   useGetArticleQuery,
   useUpdateArticleMutation,
+  useUpdateArticlesLikesMutation,
 } from "./model/apiArticle";
+export { type IArticle } from "./types/article";

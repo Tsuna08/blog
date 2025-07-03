@@ -1,8 +1,6 @@
 import {
   addDoc,
-  collection,
   deleteDoc,
-  doc,
   getDoc,
   getDocs,
   limit,
@@ -11,20 +9,17 @@ import {
   updateDoc,
 } from "firebase/firestore";
 
-import { db } from "@/app/firebase";
 import { baseApi } from "@/app/store/baseApi";
+import { IArticleLikes } from "@/features/ArticlesList/lib/article";
 
+import { collectionFc, docFc } from "../helpers/collection";
 import { IArticle } from "../types/article";
-
-const collectionName = "articles";
 
 export const articlesApi = baseApi.enhanceEndpoints({ addTagTypes: ["Articles"] }).injectEndpoints({
   endpoints: (builder) => ({
     fetchArticles: builder.query<IArticle[], void>({
       async queryFn() {
-        const snapshot = await getDocs(
-          query(collection(db, collectionName), orderBy("createdAt", "desc")),
-        );
+        const snapshot = await getDocs(query(collectionFc(), orderBy("createdAt", "desc")));
         const articles = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }) as IArticle);
         return { data: articles };
       },
@@ -32,9 +27,7 @@ export const articlesApi = baseApi.enhanceEndpoints({ addTagTypes: ["Articles"] 
     }),
     fetchPopularArticles: builder.query<IArticle[], void>({
       async queryFn() {
-        const snapshot = await getDocs(
-          query(collection(db, collectionName), orderBy("likes", "desc"), limit(3)),
-        );
+        const snapshot = await getDocs(query(collectionFc(), orderBy("likes", "desc"), limit(3)));
         const articles = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }) as IArticle);
         return { data: articles };
       },
@@ -42,36 +35,44 @@ export const articlesApi = baseApi.enhanceEndpoints({ addTagTypes: ["Articles"] 
     }),
     getArticle: builder.query<IArticle, string>({
       async queryFn(id) {
-        const snapshot = await getDoc(doc(db, collectionName, id));
-        if (!snapshot.exists()) {
-          throw new Error("Статья не найдена");
-        }
+        const snapshot = await getDoc(docFc(id));
         return { data: { id: snapshot.id, ...snapshot.data() } as IArticle };
       },
       providesTags: ["Articles"],
     }),
-
     addArticle: builder.mutation<IArticle, Omit<IArticle, "id">>({
       async queryFn(article) {
-        const docRef = await addDoc(collection(db, collectionName), article);
+        const docRef = await addDoc(collectionFc(), article);
         return { data: { id: docRef.id, ...article } };
       },
       invalidatesTags: ["Articles"],
     }),
-
     deleteArticle: builder.mutation<void, string>({
       async queryFn(id) {
-        await deleteDoc(doc(db, collectionName, id));
+        await deleteDoc(docFc(id));
         return { data: undefined };
       },
       invalidatesTags: ["Articles"],
     }),
-
     updateArticle: builder.mutation<IArticle, IArticle>({
       async queryFn(article) {
         const { id, ...data } = article;
-        await updateDoc(doc(db, collectionName, id), data);
+        await updateDoc(docFc(id), data);
         return { data: article };
+      },
+      invalidatesTags: ["Articles"],
+    }),
+    updateArticlesLikes: builder.mutation<IArticleLikes[], IArticleLikes[]>({
+      async queryFn(articles) {
+        const updates = articles.map((article) => updateDoc(docFc(article.id), { ...article }));
+
+        try {
+          await Promise.all(updates);
+          return { data: articles };
+        } catch (error) {
+          console.error("Ошибка при обновлении:", error);
+          throw error;
+        }
       },
       invalidatesTags: ["Articles"],
     }),
@@ -85,4 +86,5 @@ export const {
   useDeleteArticleMutation,
   useUpdateArticleMutation,
   useFetchPopularArticlesQuery,
+  useUpdateArticlesLikesMutation,
 } = articlesApi;

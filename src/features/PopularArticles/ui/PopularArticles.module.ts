@@ -8,7 +8,7 @@ export const StyledBox = styled(Box)`
 `;
 
 export const StyledListItem = styled(ListItem)`
-  padding: 0.5rem 0;
+  padding: 0;
   cursor: pointer;
 `;
 

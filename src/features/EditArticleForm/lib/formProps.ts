@@ -1,6 +1,6 @@
 import * as yup from "yup";
 
-import { IArticle } from "@/entities/Article/types/article";
+import { IArticle } from "@/entities/Article";
 import { requiredLabel } from "@/shared/constants/constants";
 
 import { IArticleForm } from "../types/articleForm";
