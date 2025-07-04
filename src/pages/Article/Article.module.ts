@@ -12,3 +12,20 @@ export const StyledBox = styled(Box)`
   flex-direction: column;
   gap: 0.7rem;
 `;
+
+export const StyledArticle = styled(Box)(({ theme }) => ({
+  display: "flex",
+  justifyContent: "space-between",
+  gap: "8rem",
+
+  [theme.breakpoints.down("laptop")]: {
+    flexDirection: "column",
+    gap: "1rem",
+  },
+}));
+
+export const StyledInfo = styled(Box)`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;

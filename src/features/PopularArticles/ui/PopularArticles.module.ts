@@ -1,11 +1,26 @@
-import { Box, ListItem, ListItemText, styled } from "@mui/material";
+import { Box, List, ListItem, ListItemText, styled } from "@mui/material";
 
-export const StyledBox = styled(Box)`
-  display: flex;
-  flex-direction: column;
-  padding-top: 0.5rem;
-  max-width: 20%;
-`;
+export const StyledBox = styled(Box)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  paddingTop: "0.5rem",
+  maxWidth: "20%",
+
+  [theme.breakpoints.down("laptop")]: {
+    maxWidth: "100%",
+  },
+}));
+
+export const StyledList = styled(List)(({ theme }) => ({
+  [theme.breakpoints.down("laptop")]: {
+    display: "flex",
+    justifyContent: "space-between",
+    gap: "0.5rem",
+  },
+  [theme.breakpoints.down("mobile")]: {
+    flexDirection: "column",
+  },
+}));
 
 export const StyledListItem = styled(ListItem)`
   padding: 0;

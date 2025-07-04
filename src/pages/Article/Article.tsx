@@ -21,7 +21,7 @@ import { Loader, SafeHtmlRenderer, Title } from "@/shared/components";
 import { IconButton } from "@/shared/components/IconButton";
 import { getDate } from "@/shared/hooks/getDate";
 
-import { StyledBox, StyledImage } from "./Article.module";
+import { StyledArticle, StyledBox, StyledImage, StyledInfo } from "./Article.module";
 import classes from "./Article.module.scss";
 
 export const ArticlePage = () => {
@@ -62,14 +62,14 @@ export const ArticlePage = () => {
         <StyledImage srcSet={Image} src={Image} alt='Image' loading='lazy' />
       )}
 
-      <Box display='flex' gap='8rem' justifyContent='space-between'>
+      <StyledArticle>
         {isLoading || isDeleteLoading || isUpdating ? (
           <Loader />
         ) : (
           <StyledBox flexShrink={2} width='100%'>
             {card ? (
               <>
-                <Box display='flex' justifyContent='space-between' alignItems='center'>
+                <StyledInfo>
                   <Typography variant='subtitle1' sx={{ color: "#2F222266" }}>
                     {getDate(card?.createdAt)}
                   </Typography>
@@ -100,7 +100,7 @@ export const ArticlePage = () => {
                       </>
                     )}
                   </Box>
-                </Box>
+                </StyledInfo>
                 <Title>{card?.title}</Title>
                 <SafeHtmlRenderer className={classes.article} htmlContent={card?.context ?? ""} />
               </>
@@ -111,7 +111,7 @@ export const ArticlePage = () => {
         )}
 
         <PopularArticles />
-      </Box>
+      </StyledArticle>
     </StyledBox>
   );
 };
