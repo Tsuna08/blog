@@ -28,7 +28,7 @@ export const lightPalette = {
 
 export const breakpoints = {
   values: {
-    mobile: 320,
+    mobile: 400,
     tablet: 640,
     laptop: 1024,
     desktop: 1920,

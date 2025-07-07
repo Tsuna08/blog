@@ -1,13 +1,18 @@
 import { Card, CardContent, CardHeader, List, styled } from "@mui/material";
 
-export const StyledList = styled(List)`
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-auto-rows: minmax(100px, auto);
-  gap: 1rem;
-  padding-top: 1rem;
-  flex-shrink: 2;
-`;
+export const StyledList = styled(List)(({ theme }) => ({
+  display: "grid",
+  gridTemplateColumns: "1fr 1fr 1fr",
+  gridAutoRows: "minmax(100px, auto)",
+  gap: "1rem",
+  paddingTop: "1rem",
+  flexShrink: 2,
+
+  [theme.breakpoints.down("tablet")]: {
+    display: "flex",
+    flexDirection: "column",
+  },
+}));
 
 export const StyledCard = styled(Card)`
   border-radius: 10px;
