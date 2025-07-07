@@ -1,10 +1,10 @@
-import { Divider, Typography } from "@mui/material";
+import { Divider } from "@mui/material";
 import { Fragment } from "react";
 import { generatePath, useNavigate } from "react-router-dom";
 
 import { routers } from "@/app/routers";
 import { useFetchPopularArticlesQuery } from "@/entities/Article";
-import { Loader } from "@/shared/components";
+import { Loader, Title } from "@/shared/components";
 import { getDate } from "@/shared/hooks/getDate";
 
 import {
@@ -24,9 +24,7 @@ export const PopularArticles = () => {
         <Loader />
       ) : (
         <>
-          <Typography variant='h6' fontSize='24px'>
-            Популярные статьи
-          </Typography>
+          <Title>Популярные статьи</Title>
           <StyledList>
             {articles?.map((article, index) => (
               <Fragment key={index}>

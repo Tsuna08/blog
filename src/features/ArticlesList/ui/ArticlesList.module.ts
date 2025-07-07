@@ -26,19 +26,27 @@ export const StyledCard = styled(Card)`
   }
 `;
 
-export const StyledHeader = styled(CardHeader)`
-  padding: 0.8rem 1rem;
-  .MuiCardHeader-content {
-    display: flex;
-    justify-content: space-between;
-    gap: 0.5rem;
+export const StyledHeader = styled(CardHeader)(({ theme }) => ({
+  padding: "0.8rem 1rem",
 
-    span:nth-of-type(2) {
-      flex-shrink: 0;
-      color: #2f222266;
-    }
-  }
-`;
+  ".MuiCardHeader-content": {
+    display: "flex",
+    justifyContent: "space-between",
+    gap: "0.5rem",
+
+    "span:nth-of-type(2)": {
+      flexShrink: 0,
+      color: "#2f222266",
+    },
+  },
+
+  [theme.breakpoints.down("tablet")]: {
+    ".MuiCardHeader-content": {
+      display: "flex",
+      flexWrap: "wrap-reverse",
+    },
+  },
+}));
 
 export const StyledContent = styled(CardContent)`
   padding: 0 1rem;

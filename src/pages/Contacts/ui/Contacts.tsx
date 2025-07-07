@@ -35,7 +35,7 @@ export const Contacts: FC = () => {
 
   return (
     <StyledContainer>
-      <Box sx={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
+      <Box sx={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
         <Title>Контактная информация</Title>
         <Box sx={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
           <StyledContact>

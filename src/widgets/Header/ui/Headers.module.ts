@@ -7,21 +7,31 @@ import {
   Toolbar,
 } from "@mui/material";
 
-export const StyledAppBar = styled(AppBar)`
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  background: white;
-  padding: 0 2rem;
-`;
+export const StyledAppBar = styled(AppBar)(({ theme }) => ({
+  flexDirection: "row",
+  justifyContent: "space-between",
+  alignItems: "center",
+  background: "white",
+  padding: "0 2rem",
 
-export const StyledToolbar = styled(Toolbar)`
-  height: 60px;
-  background: white;
-`;
+  [theme.breakpoints.down("tablet")]: {
+    padding: "0 0.1rem",
+  },
+}));
+
+export const StyledToolbar = styled(Toolbar)(({ theme }) => ({
+  height: "60px",
+  background: "white",
+
+  [theme.breakpoints.down("tablet")]: {
+    padding: 0,
+    display: "flex",
+    gap: "0.5rem",
+  },
+}));
 
 export const StyledIconButton = styled(IconButton)`
-  margin-right: 1rem;
+  margin-right: 0;
 
   &:focus {
     outline: none;

@@ -10,10 +10,14 @@ export const StyledFooter = styled("footer")`
   height: 250px;
 `;
 
-export const StyledBox = styled(Box)`
-  display: flex;
-  gap: 6rem;
-`;
+export const StyledBox = styled(Box)(({ theme }) => ({
+  display: "flex",
+  gap: "6rem",
+
+  [theme.breakpoints.down("mobile")]: {
+    gap: "1.5rem",
+  },
+}));
 
 export const StyledLink = styled(Link)`
   text-decoration: none;
@@ -25,4 +29,5 @@ export const StyledLink = styled(Link)`
 
 export const StyledCaption = styled(Typography)`
   color: #2f2222;
+  text-align: center;
 `;
