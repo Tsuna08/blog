@@ -1,4 +1,9 @@
 import { Box, styled } from "@mui/material";
+export const StyledContainer = styled(Box)`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+`;
 
 export const StyledImage = styled("img")(({ theme }) => ({
   width: "99.9vw",
@@ -21,8 +26,10 @@ export const StyledBox = styled(Box)(({ theme }) => ({
   display: "flex",
   gap: "2.5rem",
   justifyContent: "space-between",
+  flexGrow: 2,
 
   [theme.breakpoints.down("laptop")]: {
     flexDirection: "column",
+    alignItems: "center",
   },
 }));

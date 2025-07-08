@@ -54,11 +54,11 @@ export const ArticlesList = () => {
   };
 
   return (
-    <StyledList>
+    <>
       {isLoading || isUpdating ? (
         <Loader />
       ) : (
-        <>
+        <StyledList>
           {allCards?.map((article, index) => (
             <StyledCard
               onClick={() => navigate(generatePath(routers.article, { id: article.id }))}
@@ -81,8 +81,8 @@ export const ArticlesList = () => {
               </CardActions>
             </StyledCard>
           ))}
-        </>
+        </StyledList>
       )}
-    </StyledList>
+    </>
   );
 };
