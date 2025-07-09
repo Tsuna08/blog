@@ -9,8 +9,8 @@ import {
   Tooltip,
 } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useMemo, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { useAuth } from "@/app/providers/AuthProvider";
 import { routers } from "@/app/routers";
@@ -30,21 +30,17 @@ export const Header = () => {
   const navigate = useNavigate();
   const { isAdmin, user, logout } = useAuth();
   const isTablet = useMediaQuery(theme.breakpoints.down("tablet"));
+  const location = useLocation();
 
-  const [value, setValue] = useState(0);
-  const [links, setLinks] = useState(listLinks);
   const [open, setOpen] = useState(false);
 
-  useEffect(() => setValue(0), [links]);
-  useEffect(
-    () =>
-      setLinks([
-        ...listLinks,
-        ...(isAdmin ? adminLink : []),
-        ...(user ? isUserLinks : noUsersLinks),
-      ]),
+  const currentPath = location.pathname;
+  const links = useMemo(
+    () => [...listLinks, ...(isAdmin ? adminLink : []), ...(user ? isUserLinks : noUsersLinks)],
     [isAdmin, user],
   );
+  const activeIndex = links.findIndex((item) => item.link === currentPath);
+  const value = activeIndex !== -1 ? activeIndex : -1;
 
   const toggleDrawer = (newOpen: boolean) => {
     setOpen(newOpen);
@@ -64,17 +60,22 @@ export const Header = () => {
       <StyledToolbar>
         {isTablet && (
           <Tooltip title='Menu'>
-            <StyledIconButton aria-label='open drawer' onClick={() => toggleDrawer(true)}>
+            <StyledIconButton aria-label='Open drawer' onClick={() => toggleDrawer(true)}>
               <Menu />
             </StyledIconButton>
           </Tooltip>
         )}
         <Avatar component={Link} to={routers.root} alt='Logo' src={Logo} />
       </StyledToolbar>
-      <Drawer open={open} onClose={() => toggleDrawer(false)}>
+      <Drawer
+        open={open}
+        aria-label='Main menu'
+        role='navigation'
+        onClose={() => toggleDrawer(false)}
+      >
         <List>
-          {links.map((item, index) => (
-            <ListItem key={index} disablePadding>
+          {links.map((item) => (
+            <ListItem key={item.link} disablePadding>
               <ListItemButton onClick={handleClickMenu(item.link)}>
                 <ListItemText primary={item.name} />
               </ListItemButton>
@@ -83,11 +84,7 @@ export const Header = () => {
         </List>
       </Drawer>
       {!isTablet && (
-        <StyledBottomNavigation
-          showLabels
-          value={value}
-          onChange={(_, newValue) => setValue(newValue)}
-        >
+        <StyledBottomNavigation showLabels value={value}>
           {links.map((item, index) => (
             <StyledBottomNavigationAction
               label={item.name}

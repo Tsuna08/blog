@@ -3,6 +3,9 @@ export const StyledContainer = styled(Box)`
   display: flex;
   flex-direction: column;
   height: 100%;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  box-sizing: border-box;
 `;
 
 export const StyledImage = styled("img")(({ theme }) => ({
