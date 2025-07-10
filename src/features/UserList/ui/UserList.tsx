@@ -1,4 +1,5 @@
 import BlockIcon from "@mui/icons-material/Block";
+import LockOpenIcon from "@mui/icons-material/LockOpen";
 import {
   Paper,
   Table,
@@ -8,21 +9,33 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+import { MouseEvent } from "react";
 import { generatePath, useNavigate } from "react-router-dom";
 
+import { useAuth } from "@/app/providers/AuthProvider";
 import { routers } from "@/app/routers";
-import { useFetchUsersQuery } from "@/entities/User";
+import { IUser, useFetchUsersQuery, useUpdateUserMutation } from "@/entities/User";
 import { Loader } from "@/shared/components";
+import { IconButton } from "@/shared/components/IconButton";
+import { getDate } from "@/shared/hooks/getDate";
 
 // import { StyledList, StyledListItemText } from "./UserList.module";
 
 export const UserList = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const { data: users, isLoading } = useFetchUsersQuery();
+  console.log("users: ", users);
+  const [updateUser, { isLoading: isUpdating }] = useUpdateUserMutation();
+
+  const handleBan = (event: MouseEvent<HTMLButtonElement>, user: IUser) => {
+    event?.stopPropagation();
+    updateUser({ ...user, ban: !user.ban });
+  };
 
   return (
     <>
-      {isLoading ? (
+      {isLoading || isUpdating ? (
         <Loader />
       ) : (
         <TableContainer component={Paper}>
@@ -37,20 +50,27 @@ export const UserList = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {users?.map((user) => (
+              {users?.map((item: IUser) => (
                 <TableRow
-                  key={user.id}
+                  key={item.id}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  onClick={() => navigate(generatePath(routers.profile, { id: user.id }))}
+                  onClick={() => navigate(generatePath(routers.profile, { id: item.id }))}
                 >
                   <TableCell component='th' scope='row'>
-                    {user.displayName}
+                    {item.displayName}
                   </TableCell>
-                  <TableCell> {user.email}</TableCell>
-                  <TableCell>{user.role} </TableCell>
-                  <TableCell>{user.createdAt as any}</TableCell>
+                  <TableCell> {item.email}</TableCell>
+                  <TableCell>{item.role} </TableCell>
+                  <TableCell>{getDate(item.createdAt)}</TableCell>
+
                   <TableCell align='right'>
-                    <BlockIcon />
+                    {user?.uid !== item.id && (
+                      <IconButton
+                        icon={item.ban ? <LockOpenIcon /> : <BlockIcon />}
+                        onClick={(e) => handleBan(e, item)}
+                        ariaLabel={item.ban ? "unlock item icon" : "ban item icon"}
+                      />
+                    )}
                   </TableCell>
                 </TableRow>
               ))}

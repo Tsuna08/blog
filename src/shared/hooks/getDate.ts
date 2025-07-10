@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore";
+
 const getFormatDate = (
   date: string | undefined | Date,
   options: Intl.DateTimeFormatOptions,
@@ -10,9 +12,13 @@ export const getShortDate = (date: string | undefined | Date): string =>
     day: "numeric",
   });
 
-export const getDate = (date: string | undefined | Date): string =>
-  getFormatDate(date, {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+export const getDate = (date: Date | Timestamp): any => {
+  console.log("date: ", date);
+  new Date(String(date))
+    .toLocaleDateString("ru-RU", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    })
+    .replace(/\.|[гГ]/g, "");
+};

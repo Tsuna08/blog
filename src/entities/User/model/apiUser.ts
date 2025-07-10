@@ -4,10 +4,9 @@ import {
   signInWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
-import { getDoc, getDocs, setDoc } from "firebase/firestore";
+import { getDoc, getDocs, setDoc, updateDoc } from "firebase/firestore";
 
 import { baseApi } from "@/app/store/baseApi";
-import { getDate } from "@/shared/hooks/getDate";
 
 import { collectionFc, docFc } from "../helpers/collection";
 import { IUser, IUserRegister } from "../types/user";
@@ -15,7 +14,7 @@ import { IUser, IUserRegister } from "../types/user";
 export const usersApi = baseApi.enhanceEndpoints({ addTagTypes: ["Users"] }).injectEndpoints({
   endpoints: (builder) => ({
     registerUser: builder.mutation<IUser, IUserRegister>({
-      async queryFn({ email, password, displayName, role = "user" }) {
+      async queryFn({ email, password, displayName, role, ban }) {
         const auth = getAuth();
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
@@ -28,7 +27,8 @@ export const usersApi = baseApi.enhanceEndpoints({ addTagTypes: ["Users"] }).inj
           email: user.email,
           displayName,
           role,
-          createdAt: new Date().toISOString(),
+          ban,
+          createdAt: new Date(),
         };
 
         await setDoc(docFc(user.uid), userData);
@@ -53,14 +53,7 @@ export const usersApi = baseApi.enhanceEndpoints({ addTagTypes: ["Users"] }).inj
     fetchUsers: builder.query<IUser[], void>({
       async queryFn() {
         const querySnapshot = await getDocs(collectionFc());
-        const users = querySnapshot.docs.map(
-          (doc) =>
-            ({
-              id: doc.id,
-              ...doc.data(),
-              createdAt: getDate(doc.data().createdAt.toDate()),
-            }) as IUser,
-        );
+        const users = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }) as IUser);
         return { data: users };
       },
       providesTags: ["Users"],
@@ -73,12 +66,22 @@ export const usersApi = baseApi.enhanceEndpoints({ addTagTypes: ["Users"] }).inj
       },
       providesTags: ["Users"],
     }),
+
+    updateUser: builder.mutation<IUser, IUser>({
+      async queryFn(user) {
+        const { id, ...data } = user;
+        await updateDoc(docFc(id), data);
+        return { data: user };
+      },
+      invalidatesTags: ["Users"],
+    }),
   }),
 });
 
 export const {
   useRegisterUserMutation,
   useLoginUserMutation,
+  useUpdateUserMutation,
   useFetchUsersQuery,
   useGetUserByIdQuery,
 } = usersApi;

@@ -34,7 +34,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
 
   const signup = async (email: string, password: string, displayName: string) => {
-    await registerUser({ email, password, displayName });
+    await registerUser({ email, password, displayName, role: "user", ban: false });
   };
 
   const login = async (email: string, password: string) => {
