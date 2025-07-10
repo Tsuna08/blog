@@ -1,15 +1,10 @@
 import { onAuthStateChanged, signOut, User } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 
 import { auth } from "@/app/firebase";
 import { db } from "@/app/firebase";
-import { registerUser } from "@/entities/User";
-import { loginUser } from "@/entities/User/model/usersSlice";
-import { IUser } from "@/entities/User/types/user";
-
-import { AppDispatch } from "../store/store";
+import { IUser, useLoginUserMutation, useRegisterUserMutation } from "@/entities/User";
 
 interface AuthContextType {
   user: User | null | IUser;
@@ -31,18 +26,19 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const dispatch = useDispatch<AppDispatch>();
+  const [registerUser] = useRegisterUserMutation();
+  const [loginUser] = useLoginUserMutation();
 
   const [user, setUser] = useState<User | null>(null);
   const [role, setRole] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   const signup = async (email: string, password: string, displayName: string) => {
-    await dispatch(registerUser({ email, password, displayName }));
+    await registerUser({ email, password, displayName });
   };
 
   const login = async (email: string, password: string) => {
-    await dispatch(loginUser({ email, password }));
+    await loginUser({ email, password });
   };
 
   const logout = async () => {

@@ -1,16 +1,16 @@
 import { configureStore } from "@reduxjs/toolkit";
 
 import { articlesApi } from "@/entities/Article/model/apiArticle";
-import usersReducer from "@/entities/User/model/usersSlice";
+import { usersApi } from "@/entities/User/model/apiUser";
 import commentsReducer from "@/features/Comments/model/commentsSlice";
 
 import { baseApi } from "./baseApi";
 
 export const store = configureStore({
   reducer: {
-    comments: commentsReducer,
     [articlesApi.reducerPath]: articlesApi.reducer,
-    users: usersReducer,
+    comments: commentsReducer,
+    users: usersApi.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(baseApi.middleware),
 });

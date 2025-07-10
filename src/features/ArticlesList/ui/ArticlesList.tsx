@@ -11,7 +11,7 @@ import {
 } from "@/entities/Article";
 import { CounterButton } from "@/features/CounterButton";
 import { Loader, SafeHtmlRenderer } from "@/shared/components";
-import { getDate } from "@/shared/hooks/getDate";
+import { getShortDate } from "@/shared/hooks/getDate";
 
 import { getGridStyles } from "../lib/getGridStyles";
 import { StyledCard, StyledContent, StyledHeader, StyledList } from "./ArticlesList.module";
@@ -65,7 +65,7 @@ export const ArticlesList = () => {
               sx={getGridStyles(index)}
               key={article.id}
             >
-              <StyledHeader title={article.title} subheader={getDate(article?.createdAt)} />
+              <StyledHeader title={article.title} subheader={getShortDate(article?.createdAt)} />
               {article.context && (
                 <StyledContent>
                   <SafeHtmlRenderer className={classes.text} htmlContent={article.context} />

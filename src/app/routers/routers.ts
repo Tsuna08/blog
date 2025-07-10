@@ -1,6 +1,6 @@
 export const routers = {
   root: "/",
-  profile: "/profile",
+  profile: "/profile/:id",
   article: "/article/:id",
   createArticle: "/article/create",
   editArticle: "/article/edit/:id",

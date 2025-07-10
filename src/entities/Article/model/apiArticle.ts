@@ -55,7 +55,6 @@ export const articlesApi = baseApi.enhanceEndpoints({ addTagTypes: ["Articles"] 
     }),
     updateArticle: builder.mutation<IArticle, IArticle>({
       async queryFn(article) {
-        console.log("article: 12 ", article);
         const { id, ...data } = article;
         await updateDoc(docFc(id), data);
         return { data: article };

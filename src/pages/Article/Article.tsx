@@ -19,7 +19,7 @@ import { PopularArticles } from "@/features/PopularArticles";
 import Image from "@/shared/assets/background.jpg";
 import { Loader, SafeHtmlRenderer, Title } from "@/shared/components";
 import { IconButton } from "@/shared/components/IconButton";
-import { getDate } from "@/shared/hooks/getDate";
+import { getShortDate } from "@/shared/hooks/getDate";
 
 import { StyledArticle, StyledBox, StyledImage, StyledInfo } from "./Article.module";
 import classes from "./Article.module.scss";
@@ -71,7 +71,7 @@ export const ArticlePage = () => {
               <>
                 <StyledInfo>
                   <Typography variant='subtitle1' sx={{ color: "#2F222266" }}>
-                    {getDate(card?.createdAt)}
+                    {getShortDate(card?.createdAt)}
                   </Typography>
 
                   <Box display='flex'>

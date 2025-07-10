@@ -5,7 +5,7 @@ import { generatePath, useNavigate } from "react-router-dom";
 import { routers } from "@/app/routers";
 import { useFetchPopularArticlesQuery } from "@/entities/Article";
 import { Loader, Title } from "@/shared/components";
-import { getDate } from "@/shared/hooks/getDate";
+import { getShortDate } from "@/shared/hooks/getDate";
 
 import {
   StyledBox,
@@ -35,7 +35,7 @@ export const PopularArticles = () => {
                 >
                   <StyledListItemText
                     primary={article.title}
-                    secondary={getDate(article?.createdAt)}
+                    secondary={getShortDate(article?.createdAt)}
                   />
                 </StyledListItem>
                 {articles.length !== index + 1 && <Divider key={index} />}

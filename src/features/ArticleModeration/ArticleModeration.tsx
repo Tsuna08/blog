@@ -3,7 +3,7 @@ import { Fragment } from "react";
 
 import { useFetchArticlesQuery } from "@/entities/Article";
 import { Loader, SafeHtmlRenderer } from "@/shared/components";
-import { getDate } from "@/shared/hooks/getDate";
+import { getShortDate } from "@/shared/hooks/getDate";
 
 import { StyledList, StyledListItemText } from "./ArticleModeration.module";
 
@@ -28,8 +28,8 @@ export const ArticleModeration = () => {
                     variant='body2'
                     sx={{ color: "text.primary", display: "inline" }}
                   >
-                    {getDate(article.createdAt)}
-                  </Typography>{" "}
+                    {getShortDate(article.createdAt)}
+                  </Typography>
                   <SafeHtmlRenderer htmlContent={article.context} />
                 </>
               }
