@@ -9,4 +9,8 @@ export const StyledListItemText = styled(ListItemText)`
   -webkit-line-clamp: 5;
   -webkit-box-orient: vertical;
   overflow: hidden;
+
+  .MuiTypography-body1:hover {
+    cursor: pointer;
+  }
 `;

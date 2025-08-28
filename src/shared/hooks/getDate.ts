@@ -12,13 +12,9 @@ export const getShortDate = (date: string | undefined | Date): string =>
     day: "numeric",
   });
 
-export const getDate = (date: Date | Timestamp): any => {
-  console.log("date: ", date);
-  new Date(String(date))
-    .toLocaleDateString("ru-RU", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    })
-    .replace(/\.|[гГ]/g, "");
-};
+export const convertFromTimestamp = (date: Timestamp): string =>
+  getFormatDate(date.toDate(), {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });

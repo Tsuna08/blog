@@ -1,6 +1,8 @@
 import { Divider, ListItem, Typography } from "@mui/material";
 import { Fragment } from "react";
+import { generatePath, useNavigate } from "react-router-dom";
 
+import { routers } from "@/app/routers";
 import { useFetchArticlesQuery } from "@/entities/Article";
 import { Loader, SafeHtmlRenderer } from "@/shared/components";
 import { getShortDate } from "@/shared/hooks/getDate";
@@ -8,6 +10,8 @@ import { getShortDate } from "@/shared/hooks/getDate";
 import { StyledList, StyledListItemText } from "./ArticleModeration.module";
 
 export const ArticleModeration = () => {
+  const navigate = useNavigate();
+
   const { data: articles, isLoading } = useFetchArticlesQuery();
 
   if (isLoading) {
@@ -33,6 +37,7 @@ export const ArticleModeration = () => {
                   <SafeHtmlRenderer htmlContent={article.context} />
                 </>
               }
+              onClick={() => navigate(generatePath(routers.article, { id: article.id }))}
             />
           </ListItem>
           {articles.length !== ++index && (

@@ -9,23 +9,22 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+import { Timestamp } from "firebase/firestore";
 import { MouseEvent } from "react";
 import { generatePath, useNavigate } from "react-router-dom";
 
 import { useAuth } from "@/app/providers/AuthProvider";
 import { routers } from "@/app/routers";
 import { IUser, useFetchUsersQuery, useUpdateUserMutation } from "@/entities/User";
-import { Loader } from "@/shared/components";
-import { IconButton } from "@/shared/components/IconButton";
-import { getDate } from "@/shared/hooks/getDate";
+import { IconButton, Loader } from "@/shared/components";
+import { convertFromTimestamp } from "@/shared/hooks/getDate";
 
-// import { StyledList, StyledListItemText } from "./UserList.module";
+import { StyledTableRow } from "./UserList.module";
 
 export const UserList = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, isSuperAdmin } = useAuth();
   const { data: users, isLoading } = useFetchUsersQuery();
-  console.log("users: ", users);
   const [updateUser, { isLoading: isUpdating }] = useUpdateUserMutation();
 
   const handleBan = (event: MouseEvent<HTMLButtonElement>, user: IUser) => {
@@ -45,15 +44,14 @@ export const UserList = () => {
                 <TableCell>Ник пользователя</TableCell>
                 <TableCell>Email</TableCell>
                 <TableCell>Роль</TableCell>
-                <TableCell>Дата регистлрации</TableCell>
+                <TableCell>Дата регистрации</TableCell>
                 <TableCell align='right'> </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {users?.map((item: IUser) => (
-                <TableRow
+                <StyledTableRow
                   key={item.id}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   onClick={() => navigate(generatePath(routers.profile, { id: item.id }))}
                 >
                   <TableCell component='th' scope='row'>
@@ -61,10 +59,10 @@ export const UserList = () => {
                   </TableCell>
                   <TableCell> {item.email}</TableCell>
                   <TableCell>{item.role} </TableCell>
-                  <TableCell>{getDate(item.createdAt)}</TableCell>
+                  <TableCell>{convertFromTimestamp(item.createdAt as Timestamp)}</TableCell>
 
                   <TableCell align='right'>
-                    {user?.uid !== item.id && (
+                    {user?.uid !== item.id && !isSuperAdmin && (
                       <IconButton
                         icon={item.ban ? <LockOpenIcon /> : <BlockIcon />}
                         onClick={(e) => handleBan(e, item)}
@@ -72,7 +70,7 @@ export const UserList = () => {
                       />
                     )}
                   </TableCell>
-                </TableRow>
+                </StyledTableRow>
               ))}
             </TableBody>
           </Table>

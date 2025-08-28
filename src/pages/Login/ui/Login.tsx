@@ -9,13 +9,12 @@ import {
 } from "@mui/material";
 import { FC, SyntheticEvent, useEffect, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { useAuth } from "@/app/providers/AuthProvider";
 import { routers } from "@/app/routers";
-import { RootState } from "@/app/store/store";
+import { useLoginUserMutation } from "@/entities/User";
 import { Button, TextInput } from "@/shared/components";
+import { getErrorMessage } from "@/shared/hooks/getErrorMessage";
 
 import { defaultValues, schema } from "../lib/formProps";
 import { LoginFormData } from "../types/login";
@@ -23,10 +22,9 @@ import { StyledBox } from "./Login.module";
 
 export const Login: FC = () => {
   const navigate = useNavigate();
-  const { login } = useAuth();
-  const { user, error, loading } = useSelector((state: RootState) => state.users);
-
+  const [loginUser, { data, isLoading, error }] = useLoginUserMutation();
   const [open, setOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const {
     register,
@@ -42,7 +40,7 @@ export const Login: FC = () => {
   });
 
   const onSubmit: SubmitHandler<LoginFormData> = (data: LoginFormData) => {
-    login(data.login, data.password);
+    loginUser({ email: data.login, password: data.password });
     reset();
   };
 
@@ -53,12 +51,15 @@ export const Login: FC = () => {
   };
 
   useEffect(() => {
-    if (error) setOpen(true);
+    if (error) {
+      setOpen(true);
+      setErrorMessage(getErrorMessage(error));
+    }
 
-    if (!error && !loading && user) {
+    if (!error && !isLoading && data) {
       navigate(routers.root);
     }
-  }, [error, loading, user]);
+  }, [error, isLoading, data]);
 
   return (
     <StyledBox>
@@ -99,8 +100,8 @@ export const Login: FC = () => {
           type='submit'
           fullWidth
           sx={{ mt: 4, mb: 3 }}
-          endIcon={loading && <CircularProgress />}
-          disabled={loading}
+          endIcon={isLoading && <CircularProgress />}
+          disabled={isLoading}
         >
           Войти
         </Button>
@@ -110,7 +111,7 @@ export const Login: FC = () => {
       </Link>
       <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
         <Alert onClose={handleClose} severity='error' variant='filled' sx={{ width: "100%" }}>
-          {error}
+          {errorMessage}
         </Alert>
       </Snackbar>
     </StyledBox>

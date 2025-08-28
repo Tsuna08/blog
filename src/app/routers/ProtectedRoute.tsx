@@ -19,13 +19,13 @@ export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
 };
 
 export const ProtectedAdminRoute = ({ children }: ProtectedRouteProps) => {
-  const { user, isAdmin } = useAuth();
+  const { user, isAdmin, isSuperAdmin } = useAuth();
 
   if (!user) {
     return <Login />;
   }
 
-  if (!isAdmin) {
+  if (!isAdmin && !isSuperAdmin) {
     return <ErrorPage />;
   }
 

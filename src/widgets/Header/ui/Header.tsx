@@ -28,7 +28,7 @@ import {
 
 export const Header = () => {
   const navigate = useNavigate();
-  const { isAdmin, user, logout } = useAuth();
+  const { isAdmin, isSuperAdmin, user, logout } = useAuth();
   const isTablet = useMediaQuery(theme.breakpoints.down("tablet"));
   const location = useLocation();
 
@@ -36,8 +36,12 @@ export const Header = () => {
 
   const currentPath = location.pathname;
   const links = useMemo(
-    () => [...listLinks, ...(isAdmin ? adminLink : []), ...(user ? isUserLinks : noUsersLinks)],
-    [isAdmin, user],
+    () => [
+      ...listLinks,
+      ...(isAdmin || isSuperAdmin ? adminLink : []),
+      ...(user ? isUserLinks : noUsersLinks),
+    ],
+    [isAdmin, isSuperAdmin, user],
   );
   const activeIndex = links.findIndex((item) => item.link === currentPath);
   const value = activeIndex !== -1 ? activeIndex : -1;
@@ -59,7 +63,7 @@ export const Header = () => {
     <StyledAppBar position='static'>
       <StyledToolbar>
         {isTablet && (
-          <Tooltip title='Menu'>
+          <Tooltip title='Меню'>
             <StyledIconButton aria-label='Open drawer' onClick={() => toggleDrawer(true)}>
               <Menu />
             </StyledIconButton>
@@ -69,7 +73,7 @@ export const Header = () => {
       </StyledToolbar>
       <Drawer
         open={open}
-        aria-label='Main menu'
+        aria-label='Меню навигации'
         role='navigation'
         onClose={() => toggleDrawer(false)}
       >

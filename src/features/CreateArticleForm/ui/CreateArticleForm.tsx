@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/app/providers/AuthProvider";
 import { routers } from "@/app/routers";
 import { useAddArticleMutation } from "@/entities/Article";
+import { IUser } from "@/entities/User";
 import Arrow from "@/shared/assets/arrow.svg";
 import { Button, TextInput } from "@/shared/components";
 
@@ -27,7 +28,7 @@ export const CreateArticleForm = () => {
   });
 
   const onSubmit = (data: IArticleForm) => {
-    addArticle(prepareFormValues(data, user)).then(() => navigate(routers.root));
+    addArticle(prepareFormValues(data, user as IUser)).then(() => navigate(routers.root));
   };
 
   return (

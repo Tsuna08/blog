@@ -13,12 +13,11 @@ import {
   useGetArticleQuery,
   useUpdateArticleMutation,
 } from "@/entities/Article";
-import { IArticleLikes } from "@/entities/Article/types/article";
+import { IArticleLikes } from "@/entities/Article";
 import { CounterButton } from "@/features/CounterButton";
 import { PopularArticles } from "@/features/PopularArticles";
 import Image from "@/shared/assets/background.jpg";
-import { Loader, SafeHtmlRenderer, Title } from "@/shared/components";
-import { IconButton } from "@/shared/components/IconButton";
+import { IconButton, Loader, SafeHtmlRenderer, Title } from "@/shared/components";
 import { getShortDate } from "@/shared/hooks/getDate";
 
 import { StyledArticle, StyledBox, StyledImage, StyledInfo } from "./Article.module";
@@ -28,7 +27,7 @@ export const ArticlePage = () => {
   const navigate = useNavigate();
 
   const { id } = useParams();
-  const { isAdmin, user } = useAuth();
+  const { isAdmin, isSuperAdmin, user } = useAuth();
 
   const { data: article, isLoading } = useGetArticleQuery(id ?? skipToken);
   const [deleteArticle, { isLoading: isDeleteLoading }] = useDeleteArticleMutation();
@@ -83,7 +82,7 @@ export const ArticlePage = () => {
                       counter={card?.likes ?? 0}
                       onClick={addFavorites}
                     />
-                    {(isAdmin || user?.uid === card?.authorId) && (
+                    {(isAdmin || isSuperAdmin || user?.uid === card?.authorId) && (
                       <>
                         <IconButton
                           icon={<EditIcon />}

@@ -14,6 +14,7 @@ import { EditArticle } from "@/pages/EditArticle/EditArticle";
 import { Error } from "@/pages/Error/Error";
 import { Login } from "@/pages/Login";
 import { Main } from "@/pages/Main/Main";
+import { Profile } from "@/pages/Profile";
 import { Registration } from "@/pages/Registration";
 
 import { ProtectedAdminRoute, ProtectedRoute } from "./ProtectedRoute";
@@ -52,7 +53,7 @@ export const router = createBrowserRouter([
         path: routers.profile,
         element: (
           <ProtectedRoute>
-            <>profile</>
+            <Profile />
           </ProtectedRoute>
         ),
       },
