@@ -1,5 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { CircularProgress, MenuItem, Select, Typography } from "@mui/material";
+import BlockIcon from "@mui/icons-material/Block";
+import { Box, Checkbox, CircularProgress, FormControlLabel, Typography } from "@mui/material";
 import { skipToken } from "@reduxjs/toolkit/query";
 import { Timestamp } from "firebase/firestore";
 import { FC, useEffect } from "react";
@@ -7,23 +8,29 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 
 import { useAuth } from "@/app/providers/AuthProvider";
-import { IUser, useGetUserByIdQuery, useUpdateUserMutation } from "@/entities/User";
-import { Button, TextInput } from "@/shared/components";
+import { Role, useGetUserByIdQuery, useUpdateUserMutation } from "@/entities/User";
+import { Button, Select, TextField, TextInput } from "@/shared/components";
 import { convertFromTimestamp } from "@/shared/hooks/getDate";
 
 import { defaultValues, schema } from "../lib/formProps";
+import { RolesList } from "../lib/profile";
 import { ProfileFormData } from "../types/profile";
 import { StyledShadowBox } from "./Profile.module";
 
 export const Profile: FC = () => {
-  const { isSuperAdmin, isAdmin } = useAuth();
+  const { isSuperAdmin } = useAuth();
 
   const { id } = useParams();
 
-  const { data: user, isLoading } = useGetUserByIdQuery(id ?? skipToken);
-  const [updateUser] = useUpdateUserMutation();
+  const { data: user } = useGetUserByIdQuery(id ?? skipToken);
+  const [updateUser, { isLoading }] = useUpdateUserMutation();
 
-  const { handleSubmit, control, reset } = useForm<ProfileFormData>({
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+    reset,
+  } = useForm<ProfileFormData>({
     defaultValues: defaultValues,
     resolver: yupResolver(schema),
     mode: "onChange",
@@ -31,13 +38,18 @@ export const Profile: FC = () => {
   });
 
   const onSubmit: SubmitHandler<ProfileFormData> = (data: ProfileFormData) => {
-    updateUser({ ...user, displayName: data.displayName, role: data.role } as IUser);
-    reset();
+    if (!user?.id) return;
+
+    updateUser({ ...user, displayName: data.displayName, role: data.role, ban: data.ban });
   };
 
   useEffect(() => {
     if (user) {
-      reset(user as ProfileFormData);
+      reset({
+        displayName: user.displayName ?? "",
+        role: user.role ?? Role.USER,
+        ban: user.ban ?? false,
+      });
     }
   }, [user, reset]);
 
@@ -51,37 +63,60 @@ export const Profile: FC = () => {
           <Controller
             name='displayName'
             control={control}
-            render={({ field }) => <TextInput label='Никнейм' required {...field} />}
+            render={({ field }) => (
+              <TextInput
+                label='Никнейм'
+                required
+                error={!!errors.displayName}
+                helperText={errors.displayName ? errors.displayName.message : ""}
+                {...field}
+              />
+            )}
           />
-          {(isSuperAdmin || isAdmin) && (
+          {isSuperAdmin ? (
             <Controller
               name='role'
               control={control}
               render={({ field }) => (
-                <Select label='Роль' required disabled={!isSuperAdmin} {...field}>
-                  <MenuItem value='user'>Пользователь</MenuItem>
-                  <MenuItem value='admin'>Администратор</MenuItem>
-                </Select>
+                <Select label='Роль' required options={RolesList} {...field}></Select>
               )}
             />
+          ) : (
+            <TextField label='Роль' value={user?.role ?? ""} />
           )}
           {user && (
-            <>
-              <Typography sx={{ color: "#2F222266", fontWeight: 400, fontSize: "0.75rem" }}>
-                Email
-              </Typography>
-              <Typography variant='subtitle1' sx={{ color: "#2F222266" }}>
-                {user.email}
-              </Typography>
-
-              <Typography sx={{ color: "#2F222266", fontWeight: 400, fontSize: "0.75rem" }}>
-                Дата регистрации
-              </Typography>
-              <Typography variant='subtitle1' sx={{ color: "#2F222266" }}>
-                {convertFromTimestamp(user.createdAt as Timestamp)}
-              </Typography>
-            </>
+            <Box sx={{ display: "flex", flexDirection: "column", gap: "0.5rem", ml: 1, mt: 1 }}>
+              <TextField label='Email' value={user.email} />
+              <TextField
+                label='Дата регистрации'
+                value={convertFromTimestamp(user.createdAt as Timestamp)}
+              />
+            </Box>
           )}
+          <Controller
+            name='ban'
+            control={control}
+            render={({ field }) => (
+              <FormControlLabel
+                label={field.value ? "Разблокировать" : "Заблокировать"}
+                sx={{
+                  display: "flex",
+                  flexDirection: "row-reverse",
+                  justifyContent: "left",
+                  ml: 1,
+                  gap: "0.5rem",
+                }}
+                control={
+                  <Checkbox
+                    icon={<BlockIcon sx={field?.value ? { fill: "red" } : {}} />}
+                    checkedIcon={<BlockIcon sx={{ fill: "red" }} />}
+                    {...field}
+                  />
+                }
+              />
+            )}
+          />
+
           <Button
             type='submit'
             fullWidth

@@ -6,7 +6,7 @@ export interface IUser {
   email: string | null;
   displayName: string | null;
   createdAt: Date | Timestamp;
-  role: string;
+  role: Role;
   ban: boolean;
 }
 
@@ -14,6 +14,12 @@ export interface IUserRegister {
   email: string;
   password: string;
   displayName: string;
-  role: string;
+  role: Role;
   ban: boolean;
+}
+
+export enum Role {
+  ADMIN = "admin",
+  USER = "user",
+  SUPER_ADMIN = "super_admin",
 }

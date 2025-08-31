@@ -12,7 +12,7 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
 import { routers } from "@/app/routers";
-import { useRegisterUserMutation } from "@/entities/User";
+import { Role, useRegisterUserMutation } from "@/entities/User";
 import { Button, TextInput } from "@/shared/components";
 import { getErrorMessage } from "@/shared/hooks/getErrorMessage";
 
@@ -44,7 +44,7 @@ export const Registration: FC = () => {
       email: data.login,
       password: data.password,
       displayName: data.displayName,
-      role: "user",
+      role: Role.USER,
       ban: false,
     });
 

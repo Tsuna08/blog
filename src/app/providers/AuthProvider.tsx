@@ -3,7 +3,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 
 import { auth, db } from "@/app/firebase";
-import { IUser } from "@/entities/User";
+import { IUser, Role } from "@/entities/User";
 
 interface AuthContextType {
   user: User | null | IUser;
@@ -53,8 +53,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const value = {
     user,
     role,
-    isAdmin: role === "admin",
-    isSuperAdmin: role === "superAdmin",
+    isAdmin: role === Role.ADMIN,
+    isSuperAdmin: role === Role.SUPER_ADMIN,
     logout,
   };
 

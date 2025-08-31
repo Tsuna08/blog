@@ -16,6 +16,7 @@ import { generatePath, useNavigate } from "react-router-dom";
 import { useAuth } from "@/app/providers/AuthProvider";
 import { routers } from "@/app/routers";
 import { IUser, useFetchUsersQuery, useUpdateUserMutation } from "@/entities/User";
+import { getUserRole } from "@/entities/User/helpers/getUserRole";
 import { IconButton, Loader } from "@/shared/components";
 import { convertFromTimestamp } from "@/shared/hooks/getDate";
 
@@ -58,7 +59,7 @@ export const UserList = () => {
                     {item.displayName}
                   </TableCell>
                   <TableCell> {item.email}</TableCell>
-                  <TableCell>{item.role} </TableCell>
+                  <TableCell>{getUserRole(item.role)} </TableCell>
                   <TableCell>{convertFromTimestamp(item.createdAt as Timestamp)}</TableCell>
 
                   <TableCell align='right'>
