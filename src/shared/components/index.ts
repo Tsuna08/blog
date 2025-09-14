@@ -1,4 +1,5 @@
 export { Button } from "./Button";
+export { ColumnBox } from "./ColumnBox";
 export { IconButton } from "./IconButton";
 export { Loader } from "./Loader";
 export { SafeHtmlRenderer } from "./SafeHtmlRenderer";

@@ -14,6 +14,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { useAuth } from "@/app/providers/AuthProvider";
 import { routers } from "@/app/routers";
+import { AccountMenu } from "@/features/AccountMenu";
 import Logo from "@/shared/assets/Logo.svg";
 import { theme } from "@/shared/theme/palette";
 
@@ -28,7 +29,7 @@ import {
 
 export const Header = () => {
   const navigate = useNavigate();
-  const { isAdmin, isSuperAdmin, user, logout } = useAuth();
+  const { isAdmin, isSuperAdmin, user } = useAuth();
   const isTablet = useMediaQuery(theme.breakpoints.down("tablet"));
   const location = useLocation();
 
@@ -48,10 +49,6 @@ export const Header = () => {
 
   const toggleDrawer = (newOpen: boolean) => {
     setOpen(newOpen);
-  };
-
-  const logoutUser = () => {
-    logout().then(() => window.location.assign(routers.root));
   };
 
   const handleClickMenu = (link: string) => () => {
@@ -91,15 +88,14 @@ export const Header = () => {
         <StyledBottomNavigation showLabels value={value}>
           {links.map((item, index) => (
             <StyledBottomNavigationAction
-              label={item.name}
+              label={!item?.icon ? item.name : undefined}
               key={index}
               value={index}
+              icon={item?.icon ?? undefined}
               onClick={() => navigate(item.link)}
             />
           ))}
-          {user && (
-            <StyledBottomNavigationAction label='Выйти' onClick={logoutUser} value={links.length} />
-          )}
+          {user && <AccountMenu />}
         </StyledBottomNavigation>
       )}
     </StyledAppBar>

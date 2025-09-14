@@ -24,7 +24,7 @@ import { StyledTableRow } from "./UserList.module";
 
 export const UserList = () => {
   const navigate = useNavigate();
-  const { user, isSuperAdmin } = useAuth();
+  const { user } = useAuth();
   const { data: users, isLoading } = useFetchUsersQuery();
   const [updateUser, { isLoading: isUpdating }] = useUpdateUserMutation();
 
@@ -46,7 +46,7 @@ export const UserList = () => {
                 <TableCell>Email</TableCell>
                 <TableCell>Роль</TableCell>
                 <TableCell>Дата регистрации</TableCell>
-                <TableCell align='right'> </TableCell>
+                <TableCell align='right'></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -63,7 +63,7 @@ export const UserList = () => {
                   <TableCell>{convertFromTimestamp(item.createdAt as Timestamp)}</TableCell>
 
                   <TableCell align='right'>
-                    {user?.uid !== item.id && !isSuperAdmin && (
+                    {user?.uid !== item.id && (
                       <IconButton
                         icon={item.ban ? <LockOpenIcon /> : <BlockIcon />}
                         onClick={(e) => handleBan(e, item)}

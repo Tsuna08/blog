@@ -1,12 +1,12 @@
-import { Box, Typography } from "@mui/material";
-
+import { Header } from "@/features/Header";
 import { UserList } from "@/features/UserList";
+import { ColumnBox } from "@/shared/components";
 
 export const Users = () => {
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-      <Typography variant='h5'>Список пользователей</Typography>
+    <ColumnBox>
+      <Header> Список пользователей</Header>
       <UserList />
-    </Box>
+    </ColumnBox>
   );
 };

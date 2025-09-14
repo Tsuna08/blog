@@ -1,6 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import BlockIcon from "@mui/icons-material/Block";
-import { Box, Checkbox, CircularProgress, FormControlLabel, Typography } from "@mui/material";
+import { Box, Checkbox, CircularProgress, FormControlLabel } from "@mui/material";
 import { skipToken } from "@reduxjs/toolkit/query";
 import { Timestamp } from "firebase/firestore";
 import { FC, useEffect } from "react";
@@ -9,7 +9,17 @@ import { useParams } from "react-router-dom";
 
 import { useAuth } from "@/app/providers/AuthProvider";
 import { Role, useGetUserByIdQuery, useUpdateUserMutation } from "@/entities/User";
-import { Button, Select, TextField, TextInput } from "@/shared/components";
+import { getUserRole } from "@/entities/User/helpers/getUserRole";
+import { Header } from "@/features/Header";
+import {
+  Button,
+  ColumnBox,
+  Loader,
+  Select,
+  TextField,
+  TextInput,
+  Title,
+} from "@/shared/components";
 import { convertFromTimestamp } from "@/shared/hooks/getDate";
 
 import { defaultValues, schema } from "../lib/formProps";
@@ -18,12 +28,12 @@ import { ProfileFormData } from "../types/profile";
 import { StyledShadowBox } from "./Profile.module";
 
 export const Profile: FC = () => {
-  const { isSuperAdmin } = useAuth();
+  const { isSuperAdmin, isAdmin, user: userData } = useAuth();
 
   const { id } = useParams();
 
-  const { data: user } = useGetUserByIdQuery(id ?? skipToken);
-  const [updateUser, { isLoading }] = useUpdateUserMutation();
+  const { data: user, isLoading } = useGetUserByIdQuery(id ?? skipToken);
+  const [updateUser, { isLoading: isUpdateLoading }] = useUpdateUserMutation();
 
   const {
     handleSubmit,
@@ -54,80 +64,85 @@ export const Profile: FC = () => {
   }, [user, reset]);
 
   return (
-    <>
-      <Typography component='h1' variant='h5' sx={{ mb: 3 }}>
-        Мои данные
-      </Typography>
+    <ColumnBox>
+      {isSuperAdmin || isAdmin ? <Header>Профиль пользователя</Header> : <Title>Мои данные</Title>}
       <StyledShadowBox>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Controller
-            name='displayName'
-            control={control}
-            render={({ field }) => (
-              <TextInput
-                label='Никнейм'
-                required
-                error={!!errors.displayName}
-                helperText={errors.displayName ? errors.displayName.message : ""}
-                {...field}
-              />
-            )}
-          />
-          {isSuperAdmin ? (
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <form onSubmit={handleSubmit(onSubmit)}>
             <Controller
-              name='role'
+              name='displayName'
               control={control}
               render={({ field }) => (
-                <Select label='Роль' required options={RolesList} {...field}></Select>
+                <TextInput
+                  label='Никнейм'
+                  required
+                  error={!!errors.displayName}
+                  helperText={errors.displayName ? errors.displayName.message : ""}
+                  {...field}
+                />
               )}
             />
-          ) : (
-            <TextField label='Роль' value={user?.role ?? ""} />
-          )}
-          {user && (
-            <Box sx={{ display: "flex", flexDirection: "column", gap: "0.5rem", ml: 1, mt: 1 }}>
-              <TextField label='Email' value={user.email} />
-              <TextField
-                label='Дата регистрации'
-                value={convertFromTimestamp(user.createdAt as Timestamp)}
-              />
-            </Box>
-          )}
-          <Controller
-            name='ban'
-            control={control}
-            render={({ field }) => (
-              <FormControlLabel
-                label={field.value ? "Разблокировать" : "Заблокировать"}
-                sx={{
-                  display: "flex",
-                  flexDirection: "row-reverse",
-                  justifyContent: "left",
-                  ml: 1,
-                  gap: "0.5rem",
-                }}
-                control={
-                  <Checkbox
-                    icon={<BlockIcon sx={field?.value ? { fill: "red" } : {}} />}
-                    checkedIcon={<BlockIcon sx={{ fill: "red" }} />}
-                    {...field}
-                  />
-                }
+            {isSuperAdmin && userData?.uid !== user?.uid && (
+              <Controller
+                name='role'
+                control={control}
+                render={({ field }) => (
+                  <Select label='Роль' required options={RolesList} {...field}></Select>
+                )}
               />
             )}
-          />
+            {user && (
+              <Box sx={{ display: "flex", flexDirection: "column", gap: "0.5rem", ml: 1, mt: 1 }}>
+                {userData?.uid === user?.uid && (
+                  <TextField label='Роль' value={getUserRole(user?.role) ?? ""} />
+                )}
+                <TextField label='Email' value={user.email} />
+                <TextField
+                  label='Дата регистрации'
+                  value={convertFromTimestamp(user.createdAt as Timestamp)}
+                />
+              </Box>
+            )}
+            {userData?.uid !== user?.uid && (
+              <Controller
+                name='ban'
+                control={control}
+                render={({ field }) => (
+                  <FormControlLabel
+                    label={field.value ? "Разблокировать" : "Заблокировать"}
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row-reverse",
+                      justifyContent: "left",
+                      ml: 1,
+                      gap: "0.5rem",
+                    }}
+                    control={
+                      <Checkbox
+                        icon={<BlockIcon sx={field?.value ? { fill: "red" } : {}} />}
+                        checkedIcon={<BlockIcon sx={{ fill: "red" }} />}
+                        {...field}
+                      />
+                    }
+                  />
+                )}
+              />
+            )}
 
-          <Button
-            type='submit'
-            fullWidth
-            sx={{ mt: 4, mb: 3 }}
-            endIcon={isLoading && <CircularProgress />}
-            disabled={isLoading}
-          >
-            Сохранить
-          </Button>
-        </form>
+            <Button
+              type='submit'
+              fullWidth
+              sx={{ mt: 4, mb: 3 }}
+              endIcon={isUpdateLoading && <CircularProgress />}
+              disabled={isUpdateLoading}
+            >
+              Сохранить
+            </Button>
+          </form>
+        )}
       </StyledShadowBox>
-    </>
+    </ColumnBox>
   );
 };
