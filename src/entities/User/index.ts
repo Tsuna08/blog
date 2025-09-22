@@ -1,3 +1,4 @@
+export { getUserRole } from "./helpers/getUserRole";
 export {
   useFetchUsersQuery,
   useGetUserByIdQuery,

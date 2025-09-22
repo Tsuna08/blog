@@ -9,7 +9,7 @@ import {
   useFetchArticlesQuery,
   useUpdateArticlesLikesMutation,
 } from "@/entities/Article";
-import { CounterButton } from "@/features/CounterButton";
+import { CounterButton } from "@/features";
 import { Loader, SafeHtmlRenderer } from "@/shared/components";
 import { getShortDate } from "@/shared/hooks/getDate";
 

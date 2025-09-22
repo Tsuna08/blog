@@ -14,8 +14,7 @@ import {
   useUpdateArticleMutation,
 } from "@/entities/Article";
 import { IArticleLikes } from "@/entities/Article";
-import { CounterButton } from "@/features/CounterButton";
-import { PopularArticles } from "@/features/PopularArticles";
+import { CommentsList, CounterButton, PopularArticles } from "@/features";
 import Image from "@/shared/assets/background.jpg";
 import { IconButton, Loader, SafeHtmlRenderer, Title } from "@/shared/components";
 import { getShortDate } from "@/shared/hooks/getDate";
@@ -65,47 +64,50 @@ export const ArticlePage = () => {
         {isLoading || isDeleteLoading || isUpdating ? (
           <Loader />
         ) : (
-          <StyledBox flexShrink={2} width='100%'>
-            {card ? (
-              <>
-                <StyledInfo>
-                  <Typography variant='subtitle1' sx={{ color: "#2F222266" }}>
-                    {getShortDate(card?.createdAt)}
-                  </Typography>
+          <StyledBox>
+            <StyledBox flexShrink={2} width='100%'>
+              {card ? (
+                <>
+                  <StyledInfo>
+                    <Typography variant='subtitle1' sx={{ color: "#2F222266" }}>
+                      {getShortDate(card?.createdAt)}
+                    </Typography>
 
-                  <Box display='flex'>
-                    <CounterButton
-                      ariaLabel='add to favorites'
-                      icon={
-                        <FavoriteBorderIcon sx={card.likedByUser ? { color: "#5d70dd" } : {}} />
-                      }
-                      counter={card?.likes ?? 0}
-                      onClick={addFavorites}
-                    />
-                    {(isAdmin || isSuperAdmin || user?.uid === card?.authorId) && (
-                      <>
-                        <IconButton
-                          icon={<EditIcon />}
-                          ariaLabel='edit button'
-                          onClick={() =>
-                            navigate(generatePath(routers.editArticle, { id: card.id }))
-                          }
-                        />
-                        <IconButton
-                          icon={<DeleteOutlineIcon />}
-                          ariaLabel='delete button'
-                          onClick={() => onDelete(card.id)}
-                        />
-                      </>
-                    )}
-                  </Box>
-                </StyledInfo>
-                <Title>{card?.title}</Title>
-                <SafeHtmlRenderer className={classes.article} htmlContent={card?.context ?? ""} />
-              </>
-            ) : (
-              <Typography>Статья не найдена</Typography>
-            )}
+                    <Box display='flex'>
+                      <CounterButton
+                        ariaLabel='add to favorites'
+                        icon={
+                          <FavoriteBorderIcon sx={card.likedByUser ? { color: "#5d70dd" } : {}} />
+                        }
+                        counter={card?.likes ?? 0}
+                        onClick={addFavorites}
+                      />
+                      {(isAdmin || isSuperAdmin || user?.uid === card?.authorId) && (
+                        <>
+                          <IconButton
+                            icon={<EditIcon />}
+                            ariaLabel='edit button'
+                            onClick={() =>
+                              navigate(generatePath(routers.editArticle, { id: card.id }))
+                            }
+                          />
+                          <IconButton
+                            icon={<DeleteOutlineIcon />}
+                            ariaLabel='delete button'
+                            onClick={() => onDelete(card.id)}
+                          />
+                        </>
+                      )}
+                    </Box>
+                  </StyledInfo>
+                  <Title>{card?.title}</Title>
+                  <SafeHtmlRenderer className={classes.article} htmlContent={card?.context ?? ""} />
+                </>
+              ) : (
+                <Typography>Статья не найдена</Typography>
+              )}
+            </StyledBox>
+            <CommentsList />
           </StyledBox>
         )}
 

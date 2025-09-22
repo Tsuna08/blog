@@ -8,9 +8,8 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 
 import { useAuth } from "@/app/providers/AuthProvider";
-import { Role, useGetUserByIdQuery, useUpdateUserMutation } from "@/entities/User";
-import { getUserRole } from "@/entities/User/helpers/getUserRole";
-import { Header } from "@/features/Header";
+import { getUserRole, Role, useGetUserByIdQuery, useUpdateUserMutation } from "@/entities/User";
+import { Header } from "@/features";
 import {
   Button,
   ColumnBox,

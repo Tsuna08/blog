@@ -1,12 +1,11 @@
-import { ArticleModeration } from "@/features/ArticleModeration/ArticleModeration";
-import { Header } from "@/features/Header";
+import { ArticlesPanel, Header } from "@/features";
 import { ColumnBox } from "@/shared/components";
 
 export const Articles = () => {
   return (
     <ColumnBox>
       <Header>Список статей</Header>
-      <ArticleModeration />
+      <ArticlesPanel />
     </ColumnBox>
   );
 };

@@ -3,7 +3,7 @@ import { Box } from "@mui/material";
 import { generatePath, useNavigate, useParams } from "react-router-dom";
 
 import { routers } from "@/app/routers";
-import { EditArticleForm } from "@/features/EditArticleForm";
+import { EditArticleForm } from "@/features";
 import { Title } from "@/shared/components";
 import { IconButton } from "@/shared/components/IconButton";
 

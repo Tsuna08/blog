@@ -14,7 +14,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { useAuth } from "@/app/providers/AuthProvider";
 import { routers } from "@/app/routers";
-import { AccountMenu } from "@/features/AccountMenu";
+import { AccountMenu } from "@/features";
 import Logo from "@/shared/assets/Logo.svg";
 import { theme } from "@/shared/theme/palette";
 

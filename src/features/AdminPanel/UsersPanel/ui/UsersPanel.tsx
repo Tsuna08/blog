@@ -20,9 +20,9 @@ import { getUserRole } from "@/entities/User/helpers/getUserRole";
 import { IconButton, Loader } from "@/shared/components";
 import { convertFromTimestamp } from "@/shared/hooks/getDate";
 
-import { StyledTableRow } from "./UserList.module";
+import { StyledTableRow } from "./UsersPanel.module";
 
-export const UserList = () => {
+export const UsersPanel = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { data: users, isLoading } = useFetchUsersQuery();

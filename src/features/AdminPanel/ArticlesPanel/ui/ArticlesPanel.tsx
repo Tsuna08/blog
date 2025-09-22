@@ -7,9 +7,9 @@ import { useFetchArticlesQuery } from "@/entities/Article";
 import { Loader, SafeHtmlRenderer } from "@/shared/components";
 import { getShortDate } from "@/shared/hooks/getDate";
 
-import { StyledList, StyledListItemText } from "./ArticleModeration.module";
+import { StyledList, StyledListItemText } from "./ArticlesPanel.module";
 
-export const ArticleModeration = () => {
+export const ArticlesPanel = () => {
   const navigate = useNavigate();
 
   const { data: articles, isLoading } = useFetchArticlesQuery();
