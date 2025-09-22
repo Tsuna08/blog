@@ -7,6 +7,7 @@ import {
   orderBy,
   query,
   updateDoc,
+  where,
 } from "firebase/firestore";
 
 import { baseApi } from "@/app/store/baseApi";
@@ -24,6 +25,7 @@ export const articlesApi = baseApi.enhanceEndpoints({ addTagTypes: ["Articles"] 
       },
       providesTags: ["Articles"],
     }),
+
     fetchPopularArticles: builder.query<IArticle[], void>({
       async queryFn() {
         const snapshot = await getDocs(query(collectionFc(), orderBy("likes", "desc"), limit(3)));
@@ -32,6 +34,7 @@ export const articlesApi = baseApi.enhanceEndpoints({ addTagTypes: ["Articles"] 
       },
       providesTags: ["Articles"],
     }),
+
     getArticle: builder.query<IArticle, string>({
       async queryFn(id) {
         const snapshot = await getDoc(docFc(id));
@@ -39,6 +42,19 @@ export const articlesApi = baseApi.enhanceEndpoints({ addTagTypes: ["Articles"] 
       },
       providesTags: ["Articles"],
     }),
+
+    getArticlesByIds: builder.query<IArticle[], string[]>({
+      async queryFn(ids) {
+        const q = query(collectionFc(), where("id", "in", ids));
+        const querySnapshot = await getDocs(q);
+        const articles = querySnapshot.docs.map(
+          (doc) => ({ id: doc.id, ...doc.data() }) as IArticle,
+        );
+        return { data: articles };
+      },
+      providesTags: ["Articles"],
+    }),
+
     addArticle: builder.mutation<IArticle, Omit<IArticle, "id">>({
       async queryFn(article) {
         const docRef = await addDoc(collectionFc(), article);
@@ -46,6 +62,7 @@ export const articlesApi = baseApi.enhanceEndpoints({ addTagTypes: ["Articles"] 
       },
       invalidatesTags: ["Articles"],
     }),
+
     deleteArticle: builder.mutation<void, string>({
       async queryFn(id) {
         await deleteDoc(docFc(id));
@@ -53,6 +70,7 @@ export const articlesApi = baseApi.enhanceEndpoints({ addTagTypes: ["Articles"] 
       },
       invalidatesTags: ["Articles"],
     }),
+
     updateArticle: builder.mutation<IArticle, IArticle>({
       async queryFn(article) {
         const { id, ...data } = article;
@@ -61,6 +79,7 @@ export const articlesApi = baseApi.enhanceEndpoints({ addTagTypes: ["Articles"] 
       },
       invalidatesTags: ["Articles"],
     }),
+
     updateArticlesLikes: builder.mutation<IArticleLikes[], IArticleLikes[]>({
       async queryFn(articles) {
         const updates = articles.map((article) => updateDoc(docFc(article.id), { ...article }));
@@ -86,4 +105,5 @@ export const {
   useUpdateArticleMutation,
   useFetchPopularArticlesQuery,
   useUpdateArticlesLikesMutation,
+  useGetArticlesByIdsQuery,
 } = articlesApi;

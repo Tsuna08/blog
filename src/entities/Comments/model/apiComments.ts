@@ -23,6 +23,19 @@ export const commentsApi = baseApi.enhanceEndpoints({ addTagTypes: ["Comments"] 
       },
       providesTags: ["Comments"],
     }),
+
+    getCommentByArticleId: builder.query<IComment[], string>({
+      async queryFn(articleId) {
+        const querySnapshot = await getDocs(collectionFc());
+        const comments = querySnapshot.docs
+          .map((doc) => ({ id: doc.id, ...doc.data() }) as IComment)
+          .filter((comment) => comment.articleId === articleId)
+          .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+        return { data: comments };
+      },
+      providesTags: ["Comments"],
+    }),
+
     addComment: builder.mutation<IComment, Omit<IComment, "id">>({
       async queryFn(article) {
         const docRef = await addDoc(collectionFc(), article);
@@ -30,6 +43,7 @@ export const commentsApi = baseApi.enhanceEndpoints({ addTagTypes: ["Comments"] 
       },
       invalidatesTags: ["Comments"],
     }),
+
     deleteComment: builder.mutation<void, string>({
       async queryFn(id) {
         await deleteDoc(docFc(id));
@@ -37,6 +51,7 @@ export const commentsApi = baseApi.enhanceEndpoints({ addTagTypes: ["Comments"] 
       },
       invalidatesTags: ["Comments"],
     }),
+
     updateComment: builder.mutation<IComment, IComment>({
       async queryFn(user) {
         const { id, ...data } = user;
@@ -54,4 +69,5 @@ export const {
   useUpdateCommentMutation,
   useFetchCommentsQuery,
   useGetCommentByIdQuery,
+  useGetCommentByArticleIdQuery,
 } = commentsApi;

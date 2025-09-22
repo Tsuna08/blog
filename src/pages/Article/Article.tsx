@@ -1,3 +1,4 @@
+import ArrowBackIosSharpIcon from "@mui/icons-material/ArrowBackIosSharp";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import EditIcon from "@mui/icons-material/Edit";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -69,9 +70,16 @@ export const ArticlePage = () => {
               {card ? (
                 <>
                   <StyledInfo>
-                    <Typography variant='subtitle1' sx={{ color: "#2F222266" }}>
-                      {getShortDate(card?.createdAt)}
-                    </Typography>
+                    <Box display='flex' alignItems='center' gap='0.5rem'>
+                      <IconButton
+                        ariaLabel='return-icon'
+                        icon={<ArrowBackIosSharpIcon sx={{ width: 15, height: 15 }} />}
+                        onClick={() => window.history.back()}
+                      />
+                      <Typography variant='subtitle1' sx={{ color: "#2F222266" }}>
+                        {getShortDate(card?.createdAt)}
+                      </Typography>
+                    </Box>
 
                     <Box display='flex'>
                       <CounterButton

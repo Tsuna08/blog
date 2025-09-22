@@ -19,7 +19,6 @@ export const CreateArticleForm = () => {
 
   const {
     control,
-    register,
     handleSubmit,
     formState: { errors },
   } = useForm<IArticleForm>({
@@ -43,7 +42,6 @@ export const CreateArticleForm = () => {
             helperText={errors?.title?.message}
             disabled={isLoading}
             type='text'
-            {...register("title", { required: true })}
             {...field}
           />
         )}
@@ -60,7 +58,6 @@ export const CreateArticleForm = () => {
             disabled={isLoading}
             multiline
             type='text'
-            {...register("context")}
             {...field}
           />
         )}

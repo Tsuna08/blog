@@ -11,10 +11,10 @@ interface HeaderProps extends TypographyProps {
 
 export const Header: FC<HeaderProps> = ({ children, icon, onClose }) => {
   return (
-    <Box display='flex' alignItems='center' gap='0.5rem'>
+    <Box display='flex' alignItems='center' gap='0.3rem'>
       <IconButton
         ariaLabel='return-icon'
-        icon={icon ?? <ArrowBackIosSharpIcon />}
+        icon={icon ?? <ArrowBackIosSharpIcon sx={{ width: 15, height: 15 }} />}
         onClick={onClose ?? (() => window.history.back())}
       />
       <Title>{children}</Title>

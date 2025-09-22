@@ -2,6 +2,7 @@ export {
   useAddCommentMutation,
   useDeleteCommentMutation,
   useFetchCommentsQuery,
+  useGetCommentByArticleIdQuery,
   useGetCommentByIdQuery,
   useUpdateCommentMutation,
 } from "./model/apiComments";
