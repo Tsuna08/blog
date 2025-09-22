@@ -9,13 +9,12 @@ import {
 } from "@mui/material";
 import { FC, SyntheticEvent, useEffect, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { useAuth } from "@/app/providers/AuthProvider";
 import { routers } from "@/app/routers";
-import { RootState } from "@/app/store/store";
+import { Role, useRegisterUserMutation } from "@/entities/User";
 import { Button, TextInput } from "@/shared/components";
+import { getErrorMessage } from "@/shared/hooks/getErrorMessage";
 
 import { defaultValues, schema } from "../lib/formProps";
 import { RegistrationFormData } from "../types/registration";
@@ -23,9 +22,8 @@ import { StyledBox } from "./Registration.module";
 
 export const Registration: FC = () => {
   const navigate = useNavigate();
-  const { signup } = useAuth();
-  const { user, error, loading } = useSelector((state: RootState) => state.users);
-
+  const [registerUser, { data, isLoading, error }] = useRegisterUserMutation();
+  const [errorMessage, setErrorMessage] = useState("");
   const [open, setOpen] = useState(false);
 
   const {
@@ -42,7 +40,14 @@ export const Registration: FC = () => {
   });
 
   const onSubmit: SubmitHandler<RegistrationFormData> = (data: RegistrationFormData) => {
-    signup(data.login, data.password, data.displayName);
+    registerUser({
+      email: data.login,
+      password: data.password,
+      displayName: data.displayName,
+      role: Role.USER,
+      ban: false,
+    });
+
     reset();
   };
 
@@ -52,12 +57,15 @@ export const Registration: FC = () => {
   };
 
   useEffect(() => {
-    if (error) setOpen(true);
+    if (error) {
+      setOpen(true);
+      setErrorMessage(getErrorMessage(error));
+    }
 
-    if (!error && !loading && user) {
+    if (!error && !isLoading && data) {
       navigate(routers.root);
     }
-  }, [error, loading, user]);
+  }, [error, isLoading, data]);
 
   return (
     <StyledBox>
@@ -113,8 +121,8 @@ export const Registration: FC = () => {
           fullWidth
           variant='contained'
           sx={{ mt: 4, mb: 2 }}
-          endIcon={loading && <CircularProgress />}
-          disabled={loading}
+          endIcon={isLoading && <CircularProgress />}
+          disabled={isLoading}
         >
           Зарегистрироваться
         </Button>
@@ -124,7 +132,7 @@ export const Registration: FC = () => {
       </Link>
       <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
         <Alert onClose={handleClose} severity='error' variant='filled' sx={{ width: "100%" }}>
-          {error}
+          {errorMessage}
         </Alert>
       </Snackbar>
     </StyledBox>

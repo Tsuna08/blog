@@ -11,6 +11,7 @@ export const StyledBox = styled(Box)`
   display: flex;
   flex-direction: column;
   gap: 0.7rem;
+  width: 100%;
 `;
 
 export const StyledArticle = styled(Box)(({ theme }) => ({

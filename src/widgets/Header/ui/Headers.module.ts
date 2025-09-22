@@ -46,7 +46,7 @@ export const StyledBottomNavigation = styled(BottomNavigation)`
 export const StyledBottomNavigationAction = styled(BottomNavigationAction)`
   text-align: center;
   padding: 0;
-  min-width: auto;
+  min-width: fit-content;
   padding: 0.5rem 0.3rem;
   border-radius: 8px;
 

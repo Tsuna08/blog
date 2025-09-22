@@ -1,5 +1,4 @@
-import { ArticlesList } from "@/features/ArticlesList";
-import { PopularArticles } from "@/features/PopularArticles";
+import { ArticlesList, PopularArticles } from "@/features";
 import Image from "@/shared/assets/image.png";
 
 import { StyledBox, StyledContainer, StyledImage } from "./Main.module";

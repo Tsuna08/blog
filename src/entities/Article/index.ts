@@ -4,6 +4,7 @@ export {
   useFetchArticlesQuery,
   useFetchPopularArticlesQuery,
   useGetArticleQuery,
+  useGetArticlesByIdsQuery,
   useUpdateArticleMutation,
   useUpdateArticlesLikesMutation,
 } from "./model/apiArticle";

@@ -2,16 +2,14 @@ import { onAuthStateChanged, signOut, User } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 
-import { auth } from "@/app/firebase";
-import { db } from "@/app/firebase";
-import { IUser, useLoginUserMutation, useRegisterUserMutation } from "@/entities/User";
+import { auth, db } from "@/app/firebase";
+import { IUser, Role } from "@/entities/User";
 
 interface AuthContextType {
   user: User | null | IUser;
   role: string | null;
   isAdmin: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  signup: (email: string, password: string, displayName: string) => Promise<void>;
+  isSuperAdmin: boolean;
   logout: () => Promise<void>;
 }
 
@@ -26,20 +24,9 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [registerUser] = useRegisterUserMutation();
-  const [loginUser] = useLoginUserMutation();
-
   const [user, setUser] = useState<User | null>(null);
   const [role, setRole] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-
-  const signup = async (email: string, password: string, displayName: string) => {
-    await registerUser({ email, password, displayName });
-  };
-
-  const login = async (email: string, password: string) => {
-    await loginUser({ email, password });
-  };
 
   const logout = async () => {
     await signOut(auth).then(() => setRole(null));
@@ -51,6 +38,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (user) {
         const userDoc = await getDoc(doc(db, "users", user.uid));
         if (userDoc.exists()) {
+          console.log("userDoc.data().role: ", userDoc.data().role);
           setRole(userDoc.data().role);
         } else {
           throw new Error("Пользователь не найден");
@@ -65,9 +53,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const value = {
     user,
     role,
-    isAdmin: role === "admin",
-    login,
-    signup,
+    isAdmin: role === Role.ADMIN,
+    isSuperAdmin: role === Role.SUPER_ADMIN,
     logout,
   };
 

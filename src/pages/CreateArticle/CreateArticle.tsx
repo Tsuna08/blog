@@ -1,4 +1,4 @@
-import { CreateArticleForm } from "@/features/CreateArticleForm";
+import { CreateArticleForm } from "@/features";
 import { Title } from "@/shared/components";
 
 export const CreateArticle = () => {

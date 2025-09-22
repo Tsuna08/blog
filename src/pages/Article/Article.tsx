@@ -1,3 +1,4 @@
+import ArrowBackIosSharpIcon from "@mui/icons-material/ArrowBackIosSharp";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import EditIcon from "@mui/icons-material/Edit";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -13,12 +14,10 @@ import {
   useGetArticleQuery,
   useUpdateArticleMutation,
 } from "@/entities/Article";
-import { IArticleLikes } from "@/entities/Article/types/article";
-import { CounterButton } from "@/features/CounterButton";
-import { PopularArticles } from "@/features/PopularArticles";
+import { IArticleLikes } from "@/entities/Article";
+import { CommentsList, CounterButton, PopularArticles } from "@/features";
 import Image from "@/shared/assets/background.jpg";
-import { Loader, SafeHtmlRenderer, Title } from "@/shared/components";
-import { IconButton } from "@/shared/components/IconButton";
+import { IconButton, Loader, SafeHtmlRenderer, Title } from "@/shared/components";
 import { getShortDate } from "@/shared/hooks/getDate";
 
 import { StyledArticle, StyledBox, StyledImage, StyledInfo } from "./Article.module";
@@ -28,7 +27,7 @@ export const ArticlePage = () => {
   const navigate = useNavigate();
 
   const { id } = useParams();
-  const { isAdmin, user } = useAuth();
+  const { isAdmin, isSuperAdmin, user } = useAuth();
 
   const { data: article, isLoading } = useGetArticleQuery(id ?? skipToken);
   const [deleteArticle, { isLoading: isDeleteLoading }] = useDeleteArticleMutation();
@@ -66,47 +65,57 @@ export const ArticlePage = () => {
         {isLoading || isDeleteLoading || isUpdating ? (
           <Loader />
         ) : (
-          <StyledBox flexShrink={2} width='100%'>
-            {card ? (
-              <>
-                <StyledInfo>
-                  <Typography variant='subtitle1' sx={{ color: "#2F222266" }}>
-                    {getShortDate(card?.createdAt)}
-                  </Typography>
+          <StyledBox>
+            <StyledBox flexShrink={2} width='100%'>
+              {card ? (
+                <>
+                  <StyledInfo>
+                    <Box display='flex' alignItems='center' gap='0.5rem'>
+                      <IconButton
+                        ariaLabel='return-icon'
+                        icon={<ArrowBackIosSharpIcon sx={{ width: 15, height: 15 }} />}
+                        onClick={() => window.history.back()}
+                      />
+                      <Typography variant='subtitle1' sx={{ color: "#2F222266" }}>
+                        {getShortDate(card?.createdAt)}
+                      </Typography>
+                    </Box>
 
-                  <Box display='flex'>
-                    <CounterButton
-                      ariaLabel='add to favorites'
-                      icon={
-                        <FavoriteBorderIcon sx={card.likedByUser ? { color: "#5d70dd" } : {}} />
-                      }
-                      counter={card?.likes ?? 0}
-                      onClick={addFavorites}
-                    />
-                    {(isAdmin || user?.uid === card?.authorId) && (
-                      <>
-                        <IconButton
-                          icon={<EditIcon />}
-                          ariaLabel='edit button'
-                          onClick={() =>
-                            navigate(generatePath(routers.editArticle, { id: card.id }))
-                          }
-                        />
-                        <IconButton
-                          icon={<DeleteOutlineIcon />}
-                          ariaLabel='delete button'
-                          onClick={() => onDelete(card.id)}
-                        />
-                      </>
-                    )}
-                  </Box>
-                </StyledInfo>
-                <Title>{card?.title}</Title>
-                <SafeHtmlRenderer className={classes.article} htmlContent={card?.context ?? ""} />
-              </>
-            ) : (
-              <Typography>Статья не найдена</Typography>
-            )}
+                    <Box display='flex'>
+                      <CounterButton
+                        ariaLabel='add to favorites'
+                        icon={
+                          <FavoriteBorderIcon sx={card.likedByUser ? { color: "#5d70dd" } : {}} />
+                        }
+                        counter={card?.likes ?? 0}
+                        onClick={addFavorites}
+                      />
+                      {(isAdmin || isSuperAdmin || user?.uid === card?.authorId) && (
+                        <>
+                          <IconButton
+                            icon={<EditIcon />}
+                            ariaLabel='edit button'
+                            onClick={() =>
+                              navigate(generatePath(routers.editArticle, { id: card.id }))
+                            }
+                          />
+                          <IconButton
+                            icon={<DeleteOutlineIcon />}
+                            ariaLabel='delete button'
+                            onClick={() => onDelete(card.id)}
+                          />
+                        </>
+                      )}
+                    </Box>
+                  </StyledInfo>
+                  <Title>{card?.title}</Title>
+                  <SafeHtmlRenderer className={classes.article} htmlContent={card?.context ?? ""} />
+                </>
+              ) : (
+                <Typography>Статья не найдена</Typography>
+              )}
+            </StyledBox>
+            <CommentsList />
           </StyledBox>
         )}
 

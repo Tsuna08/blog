@@ -14,6 +14,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { useAuth } from "@/app/providers/AuthProvider";
 import { routers } from "@/app/routers";
+import { AccountMenu } from "@/features";
 import Logo from "@/shared/assets/Logo.svg";
 import { theme } from "@/shared/theme/palette";
 
@@ -28,7 +29,7 @@ import {
 
 export const Header = () => {
   const navigate = useNavigate();
-  const { isAdmin, user, logout } = useAuth();
+  const { isAdmin, isSuperAdmin, user } = useAuth();
   const isTablet = useMediaQuery(theme.breakpoints.down("tablet"));
   const location = useLocation();
 
@@ -36,18 +37,18 @@ export const Header = () => {
 
   const currentPath = location.pathname;
   const links = useMemo(
-    () => [...listLinks, ...(isAdmin ? adminLink : []), ...(user ? isUserLinks : noUsersLinks)],
-    [isAdmin, user],
+    () => [
+      ...listLinks,
+      ...(isAdmin || isSuperAdmin ? adminLink : []),
+      ...(user ? isUserLinks : noUsersLinks),
+    ],
+    [isAdmin, isSuperAdmin, user],
   );
   const activeIndex = links.findIndex((item) => item.link === currentPath);
   const value = activeIndex !== -1 ? activeIndex : -1;
 
   const toggleDrawer = (newOpen: boolean) => {
     setOpen(newOpen);
-  };
-
-  const logoutUser = () => {
-    logout().then(() => window.location.assign(routers.root));
   };
 
   const handleClickMenu = (link: string) => () => {
@@ -59,7 +60,7 @@ export const Header = () => {
     <StyledAppBar position='static'>
       <StyledToolbar>
         {isTablet && (
-          <Tooltip title='Menu'>
+          <Tooltip title='Меню'>
             <StyledIconButton aria-label='Open drawer' onClick={() => toggleDrawer(true)}>
               <Menu />
             </StyledIconButton>
@@ -69,7 +70,7 @@ export const Header = () => {
       </StyledToolbar>
       <Drawer
         open={open}
-        aria-label='Main menu'
+        aria-label='Меню навигации'
         role='navigation'
         onClose={() => toggleDrawer(false)}
       >
@@ -87,15 +88,14 @@ export const Header = () => {
         <StyledBottomNavigation showLabels value={value}>
           {links.map((item, index) => (
             <StyledBottomNavigationAction
-              label={item.name}
+              label={!item?.icon ? item.name : undefined}
               key={index}
               value={index}
+              icon={item?.icon ?? undefined}
               onClick={() => navigate(item.link)}
             />
           ))}
-          {user && (
-            <StyledBottomNavigationAction label='Выйти' onClick={logoutUser} value={links.length} />
-          )}
+          {user && <AccountMenu />}
         </StyledBottomNavigation>
       )}
     </StyledAppBar>

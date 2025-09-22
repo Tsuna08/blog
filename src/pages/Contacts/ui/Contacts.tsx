@@ -7,7 +7,7 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 
 import Arrow from "@/shared/assets/arrow.svg";
-import { Button, TextInput, Title } from "@/shared/components";
+import { Button, ColumnBox, TextInput, Title } from "@/shared/components";
 
 import { defaultValues, schema } from "../lib/formProps";
 import { socialNetworks } from "../model/contacts";
@@ -35,9 +35,9 @@ export const Contacts: FC = () => {
 
   return (
     <StyledContainer>
-      <Box sx={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+      <ColumnBox>
         <Title>Контактная информация</Title>
-        <Box sx={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+        <ColumnBox>
           <StyledContact>
             <PhoneIcon />
             <Typography variant='subtitle2'>+7 (987) 887-87</Typography>
@@ -46,13 +46,13 @@ export const Contacts: FC = () => {
             <PlaceIcon />
             <Typography variant='subtitle2'>г. Санкт-Петербург, ул. Ленина, 9</Typography>
           </StyledContact>
-        </Box>
+        </ColumnBox>
         <Box sx={{ display: "flex", gap: "1rem" }}>
           {socialNetworks.map((item, index) => (
             <Avatar key={index} component={Link} to={item.link} alt={item.title} src={item.icon} />
           ))}
         </Box>
-      </Box>
+      </ColumnBox>
       <StyledBox>
         <Title>Напишите нам</Title>
         <form onSubmit={handleSubmit(onSubmit)}>
