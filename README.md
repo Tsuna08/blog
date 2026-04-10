@@ -2,6 +2,10 @@
 
 A blog is a content management system designed for publishing articles and posts.
 
+## Preview
+
+![Blog Preview](image.png)
+
 ## Technologies
 
 - **React**
@@ -63,10 +67,6 @@ yarn lint
 # Run preview the build
 yarn preview
 ```
-
-## Preview
-
-![Blog Preview]![alt text](image.png)
 
 ## Test Users
 
