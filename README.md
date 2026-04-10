@@ -60,8 +60,8 @@ yarn build
 # Run linter
 yarn lint
 
-# Run prettier
-yarn lint
+# Run preview the build
+yarn preview
 ```
 
 ## Preview
